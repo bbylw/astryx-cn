@@ -31,9 +31,9 @@ export function CodeBlock({ npm, pnpm, yarn, bun }: CodeBlockProps) {
   };
 
   return (
-    <div className="relative my-6 rounded-xl border border-border/80 bg-neutral-900/5 dark:bg-neutral-950/40 backdrop-blur-sm overflow-hidden group">
+    <div className="relative my-6 rounded-xl border border-border bg-muted/40 backdrop-blur-sm overflow-hidden group">
       <Tabs defaultValue="npm" onValueChange={setActiveTab} className="w-full">
-        <div className="flex items-center justify-between border-b border-border/60 bg-neutral-100/60 dark:bg-neutral-900/60 px-4 py-1.5">
+        <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-1.5">
           <TabsList className="bg-transparent h-8 p-0 gap-1 border-none shadow-none">
             {["npm", "pnpm", "yarn", "bun"].map((pm) => (
               <TabsTrigger
@@ -54,14 +54,14 @@ export function CodeBlock({ npm, pnpm, yarn, bun }: CodeBlockProps) {
             title="复制代码"
           >
             {copied ? (
-              <Check className="h-3.5 w-3.5 text-emerald-500" />
+              <Check className="h-3.5 w-3.5 text-success" />
             ) : (
               <Copy className="h-3.5 w-3.5" />
             )}
           </Button>
         </div>
 
-        <div className="p-4 font-mono text-sm overflow-x-auto leading-relaxed dark:text-neutral-200">
+        <div className="p-4 font-mono text-sm overflow-x-auto leading-relaxed text-foreground">
           <TabsContent value="npm" className="mt-0 outline-none">
             <pre className="m-0"><code className="text-xs sm:text-sm">{npm}</code></pre>
           </TabsContent>

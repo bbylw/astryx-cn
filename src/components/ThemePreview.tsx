@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Play, Sparkles, Check, RefreshCw } from "lucide-react";
+import { Play, Sparkles, RefreshCw } from "lucide-react";
 
 interface ThemeSpec {
   name: string;
@@ -24,12 +22,12 @@ const themes: ThemeSpec[] = [
     desc: "柔和极简，灰度平衡，适合作为项目起点",
     fonts: "font-sans",
     cssVars: {
-      "--preview-bg-body": "#F8F4ED",
+      "--preview-bg-body": "#F1F4F7",
       "--preview-bg-surface": "#FFFFFF",
-      "--preview-text-primary": "#15110C",
+      "--preview-text-primary": "#0A1317",
       "--preview-text-secondary": "#4E606F",
-      "--preview-accent": "#15110C",
-      "--preview-border": "#E5E5E0",
+      "--preview-accent": "#0064E0",
+      "--preview-border": "#D5DEE7",
       "--preview-radius": "12px",
     },
     darkCssVars: {
@@ -37,8 +35,8 @@ const themes: ThemeSpec[] = [
       "--preview-bg-surface": "#1F1F22",
       "--preview-text-primary": "#DFE2E5",
       "--preview-text-secondary": "#AAAFB5",
-      "--preview-accent": "#DFE2E5",
-      "--preview-border": "#2E2E32",
+      "--preview-accent": "#2694FE",
+      "--preview-border": "#3A3B40",
       "--preview-radius": "12px",
     },
   },
@@ -118,7 +116,7 @@ const themes: ThemeSpec[] = [
   {
     name: "matcha",
     label: "Matcha 抹茶",
-    desc: "大地绿意主题，Figtree 字体，清新静谧",
+    desc: "大地绿意主题，DM Sans + Playwrite US Trad 字体，清新静谧",
     fonts: "font-sans",
     cssVars: {
       "--preview-bg-body": "#F4F9F4",
@@ -204,11 +202,11 @@ export function ThemePreview() {
   } as React.CSSProperties;
 
   return (
-    <div className="w-full max-w-5xl mx-auto rounded-3xl border border-border/80 overflow-hidden shadow-2xl bg-card">
+    <div className="w-full max-w-5xl mx-auto rounded-3xl border border-border overflow-hidden shadow-2xl bg-card">
       <div className="p-6 border-b border-border bg-muted/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h3 className="font-heading text-lg font-bold tracking-tight flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-amber-500 animate-pulse" />
+            <Sparkles className="h-5 w-5 text-primary" />
             Astryx 交互式主题沙盒
           </h3>
           <p className="text-sm text-muted-foreground">
@@ -251,7 +249,7 @@ export function ThemePreview() {
               <button
                 key={t.name}
                 onClick={() => setSelectedTheme(t)}
-                className={`w-full text-left p-3.5 rounded-xl border transition-all duration-200 group relative ${
+                className={`w-full text-left p-3.5 rounded-lg border transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] group relative ${
                   selectedTheme.name === t.name
                     ? "border-primary bg-primary/5 shadow-sm"
                     : "border-border/60 hover:border-border hover:bg-muted/40"
@@ -305,11 +303,11 @@ export function ThemePreview() {
                 className="text-[10px] font-mono select-none px-2 py-0.5 rounded-full"
                 style={{ 
                   backgroundColor: activeVars["--preview-accent"],
-                  color: isPreviewDark ? "#111" : "#fff",
+                  color: "#fff",
                   borderRadius: "9999px"
                 }}
               >
-                Beta v0.8
+                Beta v0.7.6
               </Badge>
             </div>
 
@@ -369,7 +367,7 @@ export function ThemePreview() {
                   className="px-4 py-2 text-sm font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1.5 shadow-sm"
                   style={{
                     backgroundColor: activeVars["--preview-accent"],
-                    color: isPreviewDark && selectedTheme.name !== "gothic" ? "#111" : "#fff",
+                    color: "#fff",
                     borderRadius: `calc(${activeVars["--preview-radius"]} * 0.8)`,
                   }}
                 >
@@ -393,7 +391,7 @@ export function ThemePreview() {
 
             {/* 信息流展示 */}
             <div 
-              className="p-3 text-xs border rounded-lg bg-neutral-900/5 dark:bg-white/5 opacity-80"
+              className="p-3 text-xs border rounded-lg bg-black/5 dark:bg-white/5 opacity-80"
               style={{ borderColor: activeVars["--preview-border"] }}
             >
               <p className="font-mono break-all">

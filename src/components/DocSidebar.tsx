@@ -25,7 +25,7 @@ export function DocSidebar() {
           <span className="font-heading text-lg font-black tracking-tight hover:opacity-85 transition-opacity">
             Astryx Docs
           </span>
-          <span className="text-[10px] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold px-1.5 py-0.5 rounded">
+          <span className="text-[10px] bg-accent text-accent-foreground font-bold px-1.5 py-0.5 rounded">
             中文版
           </span>
         </Link>

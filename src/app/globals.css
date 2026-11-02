@@ -27,6 +27,11 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-error: var(--error);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -39,82 +44,135 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Astryx 圆角语义尺度：inner → element → container → page → full */
+  --radius-sm: 0.25rem; /* inner */
+  --radius-md: 0.5rem; /* element */
+  --radius-lg: 0.75rem; /* container */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem; /* page */
+  --radius-4xl: 2rem;
+
+  /* Astryx 高度层级：low / med / high */
+  --shadow-2xs: var(--shadow-low);
+  --shadow-xs: var(--shadow-low);
+  --shadow-sm: var(--shadow-low);
+  --shadow-md: var(--shadow-low);
+  --shadow-lg: var(--shadow-med);
+  --shadow-xl: var(--shadow-med);
+  --shadow-2xl: var(--shadow-high);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* 表面与文本 */
+  --background: #f1f4f7;
+  --foreground: #0a1317;
+  --card: #ffffff;
+  --card-foreground: #0a1317;
+  --popover: #ffffff;
+  --popover-foreground: #0a1317;
+  --muted: #e9eef4;
+  --muted-foreground: #4e606f;
+  --secondary: #e7edf3;
+  --secondary-foreground: #0a1317;
+
+  /* 强调色 */
+  --primary: #0064e0;
+  --primary-foreground: #ffffff;
+  --accent: #e6f0fd;
+  --accent-foreground: #0064e0;
+
+  /* 状态色 */
+  --destructive: #e3193b;
+  --destructive-foreground: #ffffff;
+  --success: #0d8626;
+  --warning: #e9af08;
+  --info: #0064e0;
+  --error: #e3193b;
+
+  /* 边框与焦点 */
+  --border: #05365919;
+  --input: #05365926;
+  --ring: #0064e0;
+
+  /* 数据可视化分类色 */
+  --chart-1: #0171e3;
+  --chart-2: #0b991f;
+  --chart-3: #6b1efd;
+  --chart-4: #eb6e00;
+  --chart-5: #08a3a3;
+
+  /* 圆角（container） */
+  --radius: 0.75rem;
+
+  /* 高度层级 */
+  --shadow-low: 0 1px 1px rgb(5 54 89 / 6%), 0 2px 8px rgb(5 54 89 / 6%);
+  --shadow-med: 0 1px 2px rgb(5 54 89 / 8%), 0 2px 12px rgb(5 54 89 / 8%);
+  --shadow-high: 0 2px 2px rgb(5 54 89 / 10%), 0 8px 24px rgb(5 54 89 / 12%);
+
+  /* 动效 */
+  --duration-fast: 175ms;
+  --duration-medium: 410ms;
+  --ease-standard: cubic-bezier(0.24, 1, 0.4, 1);
+
+  /* 侧边栏 */
+  --sidebar: #f7f9fb;
+  --sidebar-foreground: #0a1317;
+  --sidebar-primary: #0064e0;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e6f0fd;
+  --sidebar-accent-foreground: #0064e0;
+  --sidebar-border: #05365919;
+  --sidebar-ring: #0064e0;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #111112;
+  --foreground: #dfe2e5;
+  --card: #1f1f22;
+  --card-foreground: #dfe2e5;
+  --popover: #28292c;
+  --popover-foreground: #dfe2e5;
+  --muted: #202125;
+  --muted-foreground: #aaafb5;
+  --secondary: #26272b;
+  --secondary-foreground: #dfe2e5;
+
+  --primary: #2694fe;
+  --primary-foreground: #ffffff;
+  --accent: #12304f;
+  --accent-foreground: #3e9efb;
+
+  --destructive: #f5394f;
+  --destructive-foreground: #111112;
+  --success: #3fb950;
+  --warning: #f2c00b;
+  --info: #2694fe;
+  --error: #f5394f;
+
+  --border: #f2f4f619;
+  --input: #f2f4f626;
+  --ring: #2694fe;
+
+  --chart-1: #2694fe;
+  --chart-2: #3fb950;
+  --chart-3: #8b5cf6;
+  --chart-4: #f0883e;
+  --chart-5: #2dd4bf;
+
+  --shadow-low: 0 1px 1px rgb(0 0 0 / 24%), 0 2px 8px rgb(0 0 0 / 24%);
+  --shadow-med: 0 1px 2px rgb(0 0 0 / 32%), 0 2px 12px rgb(0 0 0 / 32%);
+  --shadow-high: 0 2px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 44%);
+
+  --sidebar: #1a1a1d;
+  --sidebar-foreground: #dfe2e5;
+  --sidebar-primary: #2694fe;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #12304f;
+  --sidebar-accent-foreground: #3e9efb;
+  --sidebar-border: #f2f4f619;
+  --sidebar-ring: #2694fe;
 }
 
 @layer base {

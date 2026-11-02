@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
 import { useTheme } from "next-themes";
 import { ThemePreview } from "@/components/ThemePreview";
 import {
@@ -11,11 +10,9 @@ import {
   Layers,
   Palette,
   Sparkles,
-  GitBranch,
   ShieldCheck,
   Moon,
   Sun,
-  Eye,
   CheckCircle2,
   XCircle,
 } from "lucide-react";
@@ -23,12 +20,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { resolvedTheme, setTheme } = useTheme();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -49,8 +41,8 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden">
       {/* 复杂的背景装饰：渐变网格与光晕效果 */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-[600px] pointer-events-none opacity-40 dark:opacity-30">
-        <div className="absolute top-[-10%] left-[10%] w-[40%] h-[60%] rounded-full bg-gradient-to-tr from-amber-200 to-orange-100 blur-[120px] dark:from-purple-950/40 dark:to-blue-900/30" />
-        <div className="absolute top-[5%] right-[15%] w-[45%] h-[65%] rounded-full bg-gradient-to-bl from-amber-100 to-rose-200 blur-[130px] dark:from-indigo-950/30 dark:to-purple-900/20" />
+        <div className="absolute top-[-10%] left-[10%] w-[40%] h-[60%] rounded-full bg-gradient-to-tr from-primary/15 to-accent blur-[120px] dark:from-primary/20 dark:to-transparent" />
+        <div className="absolute top-[5%] right-[15%] w-[45%] h-[65%] rounded-full bg-gradient-to-bl from-accent to-transparent blur-[130px] dark:from-primary/10 dark:to-transparent" />
         <div 
           className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"
         />
@@ -60,8 +52,8 @@ export default function Home() {
       <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-heading text-xl font-extrabold tracking-tighter bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
-              Astryx<span className="text-amber-500 font-sans font-medium text-xs ml-1 bg-amber-500/10 px-1.5 py-0.5 rounded-full">Beta</span>
+            <span className="font-heading text-xl font-extrabold tracking-tighter">
+              Astryx<span className="text-accent-foreground font-sans font-medium text-xs ml-1 bg-accent px-1.5 py-0.5 rounded-full">Beta</span>
             </span>
           </div>
 
@@ -81,16 +73,15 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-3">
-            {mounted && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="rounded-full w-9 h-9"
-              >
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="切换深色模式"
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+              className="rounded-full w-9 h-9"
+            >
+              {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
             <Link href="/docs">
               <Button size="sm" className="font-semibold rounded-full px-5">
                 阅读文档
@@ -106,20 +97,20 @@ export default function Home() {
         {/* HERO 区域 */}
         <section className="text-center md:text-left flex flex-col md:flex-row items-center gap-12 pt-6">
           <div className="flex-1 flex flex-col gap-6 md:pr-6">
-            <div className="inline-flex items-center gap-1.5 self-center md:self-start bg-amber-500/10 text-amber-600 dark:text-amber-400 px-3 py-1 rounded-full text-xs font-semibold">
-              <Sparkles className="h-3 w-3 animate-pulse" />
+            <div className="inline-flex items-center gap-1.5 self-center md:self-start bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-semibold">
+              <Sparkles className="h-3 w-3" />
               Meta 内部锤炼 8 年，支撑 13,000+ 个应用
             </div>
             
             <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-foreground">
               为当下的构建方式而生的 <br />
-              <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 bg-clip-text text-transparent">
+              <span className="text-primary">
                 开源设计系统
               </span>
             </h1>
             
             <p className="text-lg text-muted-foreground leading-relaxed max-w-[60ch]">
-              一个完全可定制的系统，由<strong>人类设计师</strong>与并肩工作的<strong>人工智能智能体 (AI Agents)</strong> 协同塑造。基于 React 和 StyleX，为你提供打破封装的无束缚定制体验。
+              一个完全可定制的系统，由<strong>人类设计师</strong>与并肩工作的<strong>人工智能智能体 (AI Agents)</strong> 协同塑造。基于 React 19 与 StyleX，为你提供打破封装的无束缚定制体验。
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-2">
@@ -136,14 +127,14 @@ export default function Home() {
             </div>
 
             <div className="flex items-center justify-center md:justify-start gap-6 text-xs text-muted-foreground font-mono mt-4">
-              <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> 无样式锁定</span>
-              <span className="flex items-center gap-1"><Cpu className="h-3.5 w-3.5 text-blue-500" /> AI 开发者协同</span>
-              <span className="flex items-center gap-1"><Layers className="h-3.5 w-3.5 text-purple-500" /> 150+ 访问性组件</span>
+              <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> 无样式锁定</span>
+              <span className="flex items-center gap-1"><Cpu className="h-3.5 w-3.5 text-primary" /> AI 开发者协同</span>
+              <span className="flex items-center gap-1"><Layers className="h-3.5 w-3.5 text-chart-3" /> 150+ 无障碍组件</span>
             </div>
           </div>
 
-          <div className="flex-1 w-full max-w-lg md:max-w-none relative aspect-[4/3] rounded-2xl border border-border/80 bg-neutral-900/5 dark:bg-neutral-950/20 backdrop-blur-sm p-6 overflow-hidden flex flex-col justify-between group">
-            <div className="absolute top-0 right-0 w-[60%] h-[60%] rounded-full bg-amber-500/10 blur-[60px]" />
+          <div className="flex-1 w-full max-w-lg md:max-w-none relative aspect-[4/3] rounded-3xl border border-border bg-card/70 backdrop-blur-sm p-6 overflow-hidden flex flex-col justify-between group">
+            <div className="absolute top-0 right-0 w-[60%] h-[60%] rounded-full bg-primary/10 blur-[60px]" />
             
             <div className="flex items-center justify-between border-b border-border pb-4">
               <div className="flex items-center gap-2">
@@ -158,22 +149,22 @@ export default function Home() {
             </div>
 
             <div className="flex-1 font-mono text-sm py-4 flex flex-col justify-center gap-3 select-none">
-              <div className="text-muted-foreground"># 安装核心包与 Neutral 主题</div>
-              <div className="text-foreground">
-                <span className="text-amber-500">npm</span> install @astryxdesign/core @astryxdesign/theme-neutral
+              <div className="text-muted-foreground"># 安装核心包、StyleX 与 Neutral 主题</div>
+              <div className="text-foreground break-all">
+                <span className="text-primary">npm</span> install @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral
               </div>
-              <div className="text-muted-foreground"># 运行 AI 智能体上下文初始化</div>
+              <div className="text-muted-foreground"># 生成主题模块（CSS 与字体）</div>
               <div className="text-foreground">
-                <span className="text-amber-500">npx</span> astryx init
+                <span className="text-primary">npx</span> astryx theme add neutral
               </div>
-              <div className="text-emerald-500 font-semibold mt-2 flex items-center gap-1.5">
+              <div className="text-success font-semibold mt-2 flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" /> Done! AI documentation setup complete.
               </div>
             </div>
 
             <div className="border-t border-border pt-4 flex items-center justify-between">
               <span className="text-xs text-muted-foreground">支持 npm, pnpm, yarn, bun 等包管理</span>
-              <span className="text-xs text-muted-foreground font-mono">v0.8.2</span>
+              <span className="text-xs text-muted-foreground font-mono">v0.7.6</span>
             </div>
           </div>
         </section>
@@ -199,10 +190,10 @@ export default function Home() {
             {/* 卡片 1: 开放内部结构 */}
             <motion.div 
               variants={itemVariants} 
-              className="md:col-span-8 group relative rounded-3xl border border-border/80 bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-xl transition-all duration-300"
+              className="md:col-span-8 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
-                <div className="h-10 w-10 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-accent-foreground">
                   <Layers className="h-5 w-5" />
                 </div>
                 <h3 className="text-xl font-bold tracking-tight">开放内部结构 (Open Internals)</h3>
@@ -210,18 +201,18 @@ export default function Home() {
                   组件可在任意层级进行灵活组合，永远不会被封闭的顶层 API 锁定。你需要的所有构建块都直接对外导出；当面临深度定制时，`swizzle` 命令可一键将组件源码释放进项目，接管完全的控制权。
                 </p>
               </div>
-              <div className="mt-8 border border-border/60 rounded-xl bg-muted/20 p-4 font-mono text-xs text-muted-foreground">
-                <span className="text-amber-500">npx</span> astryx swizzle Button
+              <div className="mt-8 border border-border/60 rounded-lg bg-muted/40 p-4 font-mono text-xs text-muted-foreground">
+                <span className="text-primary">npx</span> astryx swizzle Button
               </div>
             </motion.div>
 
             {/* 卡片 2: 无样式锁定 */}
             <motion.div 
               variants={itemVariants} 
-              className="md:col-span-4 group relative rounded-3xl border border-border/80 bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-xl transition-all duration-300"
+              className="md:col-span-4 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
-                <div className="h-10 w-10 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-secondary-foreground">
                   <Palette className="h-5 w-5" />
                 </div>
                 <h3 className="text-xl font-bold tracking-tight">无样式锁定</h3>
@@ -235,10 +226,10 @@ export default function Home() {
             {/* 卡片 3: 人机协同共建 */}
             <motion.div 
               variants={itemVariants} 
-              className="md:col-span-5 group relative rounded-3xl border border-border/80 bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-xl transition-all duration-300"
+              className="md:col-span-5 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
-                <div className="h-10 w-10 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-500">
+                <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-accent-foreground">
                   <Cpu className="h-5 w-5" />
                 </div>
                 <h3 className="text-xl font-bold tracking-tight">人机协同共建 (AI-Ready)</h3>
@@ -252,10 +243,10 @@ export default function Home() {
             {/* 卡片 4: 语义化主题系统 */}
             <motion.div 
               variants={itemVariants} 
-              className="md:col-span-7 group relative rounded-3xl border border-border/80 bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-xl transition-all duration-300"
+              className="md:col-span-7 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
-                <div className="h-10 w-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-secondary-foreground">
                   <Sparkles className="h-5 w-5" />
                 </div>
                 <h3 className="text-xl font-bold tracking-tight">无需封装的主题定制</h3>
@@ -263,8 +254,8 @@ export default function Home() {
                   主题系统是一组极具表现力的 CSS 自定义属性。设计师与开发者无需为了适配新品牌而分叉代码、拆包重写，只需简单覆写设计令牌，就能让 Astryx 打上鲜明的品牌烙印。
                 </p>
               </div>
-              <div className="flex gap-2 mt-8">
-                {["Neutral", "Matcha", "Butter", "Chocolate", "Y2K"].map((t) => (
+              <div className="flex flex-wrap gap-2 mt-8">
+                {["Neutral", "Butter", "Chocolate", "Gothic", "Matcha", "Stone", "Y2K"].map((t) => (
                   <span key={t} className="text-xs px-2.5 py-1 rounded-full border border-border/60 bg-muted/40 font-medium">
                     {t}
                   </span>
@@ -301,26 +292,26 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto w-full">
             {/* Dos */}
-            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 flex flex-col gap-4">
-              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold">
+            <div className="rounded-2xl border border-success/20 bg-success/5 p-6 flex flex-col gap-4">
+              <div className="flex items-center gap-2 text-success font-bold">
                 <CheckCircle2 className="h-5 w-5" />
                 推荐的做法 (Recommended)
               </div>
               <div className="flex flex-col gap-3.5 text-sm text-foreground/90">
                 <div className="flex gap-2">
-                  <span className="font-bold text-emerald-500 font-mono">1.</span>
+                  <span className="font-bold text-success font-mono">1.</span>
                   <span><strong>布局为先</strong>：先选好 {"AppShell"} 框架及侧边栏，划分预算，最后写内容。</span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="font-bold text-emerald-500 font-mono">2.</span>
+                  <span className="font-bold text-success font-mono">2.</span>
                   <span><strong>语义令牌</strong>：始终使用 <code className="bg-muted px-1 py-0.5 rounded text-xs">{"var(--color-*)"}</code> 或 Tailwind 语义类，防止色彩碎片化。</span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="font-bold text-emerald-500 font-mono">3.</span>
+                  <span className="font-bold text-success font-mono">3.</span>
                   <span><strong>主从结构</strong>：在当前页面使用 {"LayoutPanel"} / 检查面板展开详情，而不是进行路由离开跳转。</span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="font-bold text-emerald-500 font-mono">4.</span>
+                  <span className="font-bold text-success font-mono">4.</span>
                   <span><strong>受控表单</strong>：所有的 {"Input"} 表单项严格为受控组件（{"value + onChange"}）。</span>
                 </div>
               </div>
@@ -357,7 +348,7 @@ export default function Home() {
 
         {/* CTA 开始使用 */}
         <section className="rounded-3xl border border-border/80 p-8 md:p-12 bg-muted/20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto w-full">
-          <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full bg-amber-500/5 blur-[50px]" />
+          <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full bg-primary/5 blur-[50px]" />
           
           <div className="flex flex-col gap-3 max-w-xl text-center md:text-left">
             <h3 className="font-heading text-2xl md:text-3xl font-extrabold tracking-tight">
