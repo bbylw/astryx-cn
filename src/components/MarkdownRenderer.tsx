@@ -181,8 +181,8 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     };
 
     return (
-      <div className="relative my-5 rounded-xl border border-border bg-neutral-900/5 dark:bg-neutral-950/40 backdrop-blur-sm overflow-hidden group">
-        <div className="flex items-center justify-between border-b border-border bg-neutral-100/60 dark:bg-neutral-900/60 px-4 py-1.5">
+      <div className="relative my-5 rounded-xl border border-border bg-muted/40 backdrop-blur-sm overflow-hidden group">
+        <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-1.5">
           <span className="text-[11px] font-mono text-muted-foreground uppercase">{lang || "code"}</span>
           <Button
             size="icon"
@@ -190,10 +190,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             onClick={handleCopy}
             className="h-6 w-6 text-muted-foreground hover:text-foreground"
           >
-            {copied ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
+            {copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
           </Button>
         </div>
-        <pre className="p-4 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed dark:text-neutral-200">
+        <pre className="p-4 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed text-foreground">
           <code>{code}</code>
         </pre>
       </div>
@@ -248,7 +248,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           case "blockquote": {
             const quoteContent = block.content.replace(/^>\s*/gm, "");
             return (
-              <blockquote key={index} className="my-4 border-l-4 border-amber-500 bg-amber-500/5 px-4 py-3 rounded-r-lg text-sm text-foreground/80">
+              <blockquote key={index} className="my-4 border-l-4 border-primary bg-accent/50 px-4 py-3 rounded-r-lg text-sm text-foreground/80">
                 {renderInlineText(quoteContent)}
               </blockquote>
             );
@@ -294,10 +294,10 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               return (
                 <CodeBlock
                   key={index}
-                  npm="npm install @astryxdesign/core @astryxdesign/theme-neutral @astryxdesign/cli"
-                  pnpm="pnpm add @astryxdesign/core @astryxdesign/theme-neutral @astryxdesign/cli"
-                  yarn="yarn add @astryxdesign/core @astryxdesign/theme-neutral @astryxdesign/cli"
-                  bun="bun add @astryxdesign/core @astryxdesign/theme-neutral @astryxdesign/cli"
+                  npm="npm install @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral @astryxdesign/cli"
+                  pnpm="pnpm add @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral @astryxdesign/cli"
+                  yarn="yarn add @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral @astryxdesign/cli"
+                  bun="bun add @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral @astryxdesign/cli"
                 />
               );
             }
@@ -310,8 +310,6 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               .map((h) => h.trim())
               .filter((h) => h);
             
-            const alignRow = rows[1]; // --- | ---
-            
             const dataRows = rows.slice(2).map((row) =>
               row
                 .split("|")
@@ -320,7 +318,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             );
 
             return (
-              <div key={index} className="my-6 w-full overflow-x-auto border border-border/80 rounded-xl">
+              <div key={index} className="my-6 w-full overflow-x-auto border border-border rounded-xl">
                 <table className="w-full text-sm border-collapse text-left">
                   <thead className="bg-muted/40 font-semibold border-b border-border/60">
                     <tr>

@@ -1,24 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { DocSidebar } from "@/components/DocSidebar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Sun, Moon, ArrowLeft, Home } from "lucide-react";
+import { Menu, Sun, Moon, Home } from "lucide-react";
 
 export default function DocsLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -60,16 +55,15 @@ export default function DocsLayout({
               </Button>
             </Link>
 
-            {mounted && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="rounded-full w-9 h-9"
-              >
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="切换深色模式"
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+              className="rounded-full w-9 h-9"
+            >
+              {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
           </div>
         </div>
       </header>
