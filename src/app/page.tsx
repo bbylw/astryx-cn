@@ -113,8 +113,8 @@ export default function Home() {
               </span>
             </h1>
             
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-[60ch]">
-              一个完全可定制的系统，由<strong>人类设计师</strong>与并肩工作的<strong>人工智能智能体 (AI Agents)</strong> 协同塑造。基于 React 19 与 StyleX，为你提供打破封装的无束缚定制体验。
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-[26rem] text-balance">
+              一个完全可定制的系统，由<strong>人类设计师</strong>与并肩工作的<strong>人工智能智能体 (AI Agents)</strong> 协同塑造。基于 <span className="whitespace-nowrap">React 19</span> 与 StyleX，为你提供打破封装的无束缚定制体验。
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-2">
