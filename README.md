@@ -1,10 +1,26 @@
 <!-- SYNC CONTRACT: 架构变更需要同步更新文档。 -->
 
+<div align="center">
+
+<img src="https://lookaside.facebook.com/assets/astryx/Astryx-Banner.png" alt="Astryx" width="100%" />
+
 # Astryx
 
-一个开源设计系统，完全可定制，为当下的构建方式而生——由人与并肩工作的智能体共同打造。
+一个开源设计系统，完全可定制，为当下的构建方式而生：<br/>由人与并肩工作的智能体共同打造。
 
-> **目前处于 Beta 阶段** · 基于 [React](https://react.dev) 和 [StyleX](https://stylexjs.com) 构建
+**目前处于 Beta 阶段** · 基于 [React 19+](https://react.dev) 和 [StyleX](https://stylexjs.com) 构建
+
+[![npm version](https://img.shields.io/npm/v/@astryxdesign/core?label=npm&color=cb3837&logo=npm)](https://www.npmjs.com/package/@astryxdesign/core)
+[![license MIT](https://img.shields.io/npm/l/@astryxdesign/core?color=blue)](https://github.com/meta/astryx/blob/main/LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/meta/astryx/wiki/Contributing)
+
+[![Docs](https://img.shields.io/badge/Docs-astryx.atmeta.com-6741d9?logo=readthedocs&logoColor=white)](https://astryx.atmeta.com)
+[![Storybook](https://img.shields.io/badge/Storybook-live-ff4785?logo=storybook&logoColor=white)](https://astryx.atmeta.com/storybook/)
+[![Sandbox](https://img.shields.io/badge/Sandbox-playground-A9792B)](https://astryx.atmeta.com/sandbox/)
+
+**[文档](https://astryx.atmeta.com)** · **[Storybook](https://astryx.atmeta.com/storybook/)** · **[沙盒](https://astryx.atmeta.com/sandbox/)** · **[贡献指南](https://github.com/meta/astryx/wiki/Contributing)** · **[Discord](https://discord.com/invite/XnsUcFykEP)**
+
+</div>
 
 ## 概述
 
@@ -21,29 +37,39 @@ Astryx 是一个在 Meta 内部成长了八年的开源设计系统，如今已�
 
 ## 快速开始
 
-安装 Astryx 及一个主题：
+Astryx 要求 **React 19** 或更高版本（`react` 与 `react-dom` 是 `@astryxdesign/core` 的 peer dependencies）。
+
+安装 Astryx、一个主题及其 peer dependencies：
 
 ```bash
 # npm
-npm install @astryxdesign/core @astryxdesign/theme-neutral
+npm install @astryxdesign/core @astryxdesign/theme-neutral @stylexjs/stylex
 npm install -D @astryxdesign/cli
 
 # pnpm
-pnpm add @astryxdesign/core @astryxdesign/theme-neutral
+pnpm add @astryxdesign/core @astryxdesign/theme-neutral @stylexjs/stylex
 pnpm add -D @astryxdesign/cli
 
 # yarn
-yarn add @astryxdesign/core @astryxdesign/theme-neutral
+yarn add @astryxdesign/core @astryxdesign/theme-neutral @stylexjs/stylex
 yarn add -D @astryxdesign/cli
 ```
 
-最简单的配置只需引入几行 CSS 并添加主题提供器——无需构建插件、无需 PostCSS 或 Babel 配置。完整指南（Next.js、Tailwind、Vite 与 CDN）请参见 **[@astryxdesign/core README](https://github.com/facebook/astryx/blob/main/packages/core/README.md#quick-start)**。
+你也可以为自己的电脑全局安装一次 CLI，这样在任何文件夹中都能使用 `astryx`，每个编程智能体也都知道 Astryx；在项目内，它仍会运行该项目自己的版本：
+
+```bash
+npm i -g @astryxdesign/cli
+```
+
+项目安装、全局安装，还是两者都装？`astryx docs global/project-global-or-both` 会比较这几种方式（推荐两者都装），`astryx docs global` 则解释全局模式的工作方式。
+
+最简单的配置只需引入几行 CSS 并添加主题提供器——无需构建插件、无需 PostCSS 或 Babel 配置。完整指南（Next.js、Tailwind、Vite 与 CDN）请参见 **[@astryxdesign/core README](https://github.com/meta/astryx/blob/main/packages/core/README.md#quick-start)**。
 
 为了稳定调用 CLI，请在 `package.json` 中添加脚本：
 
 ```json
 "scripts": {
-  "astryx": "node node_modules/@astryxdesign/cli/bin/astryx.mjs"
+  "astryx": "node node_modules/@astryxdesign/cli/clients/cli/bin/astryx.mjs"
 }
 ```
 
@@ -51,14 +77,14 @@ yarn add -D @astryxdesign/cli
 
 ## 包
 
-| 包                                                                                      | 描述                                                                                     | README                                                                          |
-| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| [`@astryxdesign/core`](https://github.com/facebook/astryx/blob/main/packages/core)      | 组件、主题系统与工具函数                                                                 | [README](https://github.com/facebook/astryx/blob/main/packages/core/README.md)  |
-| [`@astryxdesign/cli`](https://github.com/facebook/astryx/blob/main/packages/cli)        | CLI 工具：组件文档、模板、脚手架、主题与代码迁移                                         | [README](https://github.com/facebook/astryx/blob/main/packages/cli/README.md)   |
-| [`@astryxdesign/build`](https://github.com/facebook/astryx/blob/main/packages/build)    | StyleX 源码构建插件                                                                      | [README](https://github.com/facebook/astryx/blob/main/packages/build/README.md) |
-| [`@astryxdesign/theme-*`](https://github.com/facebook/astryx/blob/main/packages/themes) | 七种开箱即用、完全可定制的主题（neutral、butter、chocolate、matcha、stone、gothic、y2k） | [README](https://github.com/facebook/astryx/blob/main/packages/themes)          |
+| 包 | 描述 | README |
+| --- | --- | --- |
+| [`@astryxdesign/core`](https://github.com/meta/astryx/tree/main/packages/core) | 组件、主题系统与工具函数 | [README](https://github.com/meta/astryx/blob/main/packages/core/README.md) |
+| [`@astryxdesign/cli`](https://github.com/meta/astryx/tree/main/packages/cli) | CLI 工具：组件文档、模板、脚手架、主题与代码迁移 | [README](https://github.com/meta/astryx/blob/main/packages/cli/README.md) |
+| [`@astryxdesign/build`](https://github.com/meta/astryx/tree/main/packages/build) | StyleX 源码构建插件 | [README](https://github.com/meta/astryx/blob/main/packages/build/README.md) |
+| [`@astryxdesign/theme-*`](https://github.com/meta/astryx/tree/main/packages/themes) | 七种开箱即用、完全可定制的主题（neutral、butter、chocolate、matcha、stone、gothic、y2k） | [README](https://github.com/meta/astryx/tree/main/packages/themes) |
 
-> `@astryxdesign/lab`（实验性组件）与 `@astryxdesign/vega`（Vega/Vega-Lite 图表封装）目前仅内部用于 Storybook 与沙盒环境，尚未发布到 npm。
+> `@astryxdesign/lab`（实验性组件）目前仅内部用于 Storybook 与沙盒环境，尚未发布到 npm。`@astryxdesign/vega`（Vega/Vega-Lite 图表封装）与 `@astryxdesign/charts`（图表组件）只以 `@canary` dist-tag 发布到 npm，尚无稳定版本。
 
 ## 原则
 
@@ -93,14 +119,20 @@ yarn add -D @astryxdesign/cli
 
 ## 贡献
 
-我们欢迎贡献！完整指南请参见 **[CONTRIBUTING.md](https://github.com/facebook/astryx/blob/main/CONTRIBUTING.md)**。
+我们欢迎贡献！完整指南请参见 **[CONTRIBUTING.md](https://github.com/meta/astryx/blob/main/CONTRIBUTING.md)**。
 
-贡献者快速开始：本仓库通过 [Corepack](https://nodejs.org/api/corepack.html) 使用 **pnpm 10**。启用一次后，正确的 pnpm 版本会自动安装：
+有问题，或者想在 PR 上获得帮助？来 **[Discord](https://discord.com/invite/XnsUcFykEP)** 找我们。
+
+我们的约定与评审标准位于 [贡献者 Wiki](https://github.com/meta/astryx/wiki/Contributing)，包括 [API 约定](https://github.com/meta/astryx/wiki/API-Conventions)、[设计约定](https://github.com/meta/astryx/wiki/Design-Conventions)、[组件生命周期](https://github.com/meta/astryx/wiki/Component-Lifecycle)、[贡献模板](https://github.com/meta/astryx/wiki/Contributing-Templates) 以及 [博客评审标准](https://github.com/meta/astryx/wiki/Blog-Review-Rubric#three-required-scored-criteria)。在开启 PR 之前，请先阅读相关标准。
+
+贡献者快速开始：本仓库使用 **Node 22+（活跃的 LTS 版本线）** 与 **pnpm 11**。你可以直接安装 pnpm，或者启用一次 [Corepack](https://nodejs.org/api/corepack.html)，让固定版本的 pnpm 自动安装：
 
 ```bash
 corepack enable
 pnpm install
 ```
+
+如果缺少 `corepack`，请直接安装 pnpm，或手动安装 Corepack；疑难解答见 [CONTRIBUTING.md](https://github.com/meta/astryx/blob/main/CONTRIBUTING.md#troubleshooting)。
 
 ## 许可
 
