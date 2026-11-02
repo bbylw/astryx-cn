@@ -14,14 +14,6 @@
   --font-sans: var(--font-sans);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -50,12 +42,12 @@
   --color-card: var(--card);
 
   /* Astryx 圆角语义尺度：inner → element → container → page → full */
-  --radius-sm: 0.25rem; /* inner */
-  --radius-md: 0.5rem; /* element */
-  --radius-lg: 0.75rem; /* container */
+  --radius-sm: var(--radius-inner);
+  --radius-md: var(--radius-element);
+  --radius-lg: var(--radius-container);
   --radius-xl: 1rem;
   --radius-2xl: 1.25rem;
-  --radius-3xl: 1.75rem; /* page */
+  --radius-3xl: var(--radius-page);
   --radius-4xl: 2rem;
 
   /* Astryx 高度层级：low / med / high */
@@ -74,114 +66,45 @@
   --font-family-heading: var(--font-sans);
   --font-family-code: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  /* 表面与文本 */
-  --background: #f1f4f7;
-  --foreground: #0a1317;
-  --card: #ffffff;
-  --card-foreground: #0a1317;
-  --popover: #ffffff;
-  --popover-foreground: #0a1317;
-  --muted: #e9eef4;
-  --muted-foreground: #4e606f;
-  --secondary: #e7edf3;
-  --secondary-foreground: #0a1317;
+  /* 语义色直接引用 Astryx 系统令牌，随亮暗模式自动适配 */
+  --background: var(--color-background-body);
+  --foreground: var(--color-text-primary);
+  --card: var(--color-background-card);
+  --card-foreground: var(--color-text-primary);
+  --popover: var(--color-background-popover);
+  --popover-foreground: var(--color-text-primary);
+  --muted-foreground: var(--color-text-secondary);
+  --secondary: var(--color-neutral);
+  --secondary-foreground: var(--color-text-primary);
 
   /* 强调色 */
-  --primary: #0064e0;
-  --primary-foreground: #ffffff;
-  --accent: #e6f0fd;
-  --accent-foreground: #0064e0;
+  --primary: var(--color-accent);
+  --primary-foreground: var(--color-on-accent);
+  --accent: var(--color-background-blue);
+  --accent-foreground: var(--color-text-accent);
 
   /* 状态色 */
-  --destructive: #e3193b;
-  --destructive-foreground: #ffffff;
-  --success: #0d8626;
-  --warning: #e9af08;
-  --info: #0064e0;
-  --error: #e3193b;
+  --destructive: var(--color-error);
+  --destructive-foreground: var(--color-on-error);
+  --success: var(--color-success);
+  --warning: var(--color-warning);
+  --info: var(--color-info);
+  --error: var(--color-error);
 
   /* 边框与焦点 */
-  --border: #05365919;
-  --input: #05365926;
-  --ring: #0064e0;
+  --border: var(--color-border);
+  --input: var(--color-border-emphasized);
+  --ring: var(--color-accent);
 
   /* 数据可视化分类色 */
-  --chart-1: #0171e3;
-  --chart-2: #0b991f;
-  --chart-3: #6b1efd;
-  --chart-4: #eb6e00;
-  --chart-5: #08a3a3;
+  --chart-1: var(--color-data-categorical-blue);
+  --chart-2: var(--color-data-categorical-green);
+  --chart-3: var(--color-data-categorical-purple);
+  --chart-4: var(--color-data-categorical-orange);
+  --chart-5: var(--color-data-categorical-teal);
 
-  /* 圆角（container） */
-  --radius: 0.75rem;
-
-  /* 高度层级 */
-  --shadow-low: 0 1px 1px rgb(5 54 89 / 6%), 0 2px 8px rgb(5 54 89 / 6%);
-  --shadow-med: 0 1px 2px rgb(5 54 89 / 8%), 0 2px 12px rgb(5 54 89 / 8%);
-  --shadow-high: 0 2px 2px rgb(5 54 89 / 10%), 0 8px 24px rgb(5 54 89 / 12%);
-
-  /* 动效 */
-  --duration-fast: 175ms;
-  --duration-medium: 410ms;
-  --ease-standard: cubic-bezier(0.24, 1, 0.4, 1);
-
-  /* 侧边栏 */
-  --sidebar: #f7f9fb;
-  --sidebar-foreground: #0a1317;
-  --sidebar-primary: #0064e0;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e6f0fd;
-  --sidebar-accent-foreground: #0064e0;
-  --sidebar-border: #05365919;
-  --sidebar-ring: #0064e0;
-}
-
-.dark {
-  --background: #111112;
-  --foreground: #dfe2e5;
-  --card: #1f1f22;
-  --card-foreground: #dfe2e5;
-  --popover: #28292c;
-  --popover-foreground: #dfe2e5;
-  --muted: #202125;
-  --muted-foreground: #aaafb5;
-  --secondary: #26272b;
-  --secondary-foreground: #dfe2e5;
-
-  --primary: #2694fe;
-  --primary-foreground: #ffffff;
-  --accent: #12304f;
-  --accent-foreground: #3e9efb;
-
-  --destructive: #f5394f;
-  --destructive-foreground: #111112;
-  --success: #3fb950;
-  --warning: #f2c00b;
-  --info: #2694fe;
-  --error: #f5394f;
-
-  --border: #f2f4f619;
-  --input: #f2f4f626;
-  --ring: #2694fe;
-
-  --chart-1: #2694fe;
-  --chart-2: #3fb950;
-  --chart-3: #8b5cf6;
-  --chart-4: #f0883e;
-  --chart-5: #2dd4bf;
-
-  --shadow-low: 0 1px 1px rgb(0 0 0 / 24%), 0 2px 8px rgb(0 0 0 / 24%);
-  --shadow-med: 0 1px 2px rgb(0 0 0 / 32%), 0 2px 12px rgb(0 0 0 / 32%);
-  --shadow-high: 0 2px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 44%);
-
-  --sidebar: #1a1a1d;
-  --sidebar-foreground: #dfe2e5;
-  --sidebar-primary: #2694fe;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #12304f;
-  --sidebar-accent-foreground: #3e9efb;
-  --sidebar-border: #f2f4f619;
-  --sidebar-ring: #2694fe;
+  /* 弱化表面需要实体色才能承载遮罩与悬停，由系统令牌混合得出 */
+  --muted: color-mix(in oklab, var(--color-text-primary) 5%, var(--color-background-body));
 }
 
 @layer base {

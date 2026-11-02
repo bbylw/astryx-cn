@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Badge, Button } from "@astryxdesign/core";
-import { Play, Sparkles, RefreshCw } from "lucide-react";
+import { Play, Sparkles, RefreshCw, Sun, Moon } from "lucide-react";
 
 interface ThemeSpec {
   name: string;
@@ -217,7 +217,8 @@ export function ThemePreview() {
           <Button
             variant="secondary"
             size="sm"
-            label={`切换模式: ${isPreviewDark ? "🌙 深色" : "☀️ 亮色"}`}
+            label={isPreviewDark ? "切换为亮色" : "切换为深色"}
+            icon={isPreviewDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
             onClick={() => setIsPreviewDark(!isPreviewDark)}
             className="text-xs h-9"
           />
@@ -226,6 +227,7 @@ export function ThemePreview() {
             size="sm"
             isIconOnly
             label="重置沙盒"
+            tooltip="重置沙盒"
             icon={<RefreshCw className="h-4 w-4" />}
             onClick={() => {
               setClickCount(0);
@@ -246,6 +248,8 @@ export function ThemePreview() {
             {themes.map((t) => (
               <button
                 key={t.name}
+                type="button"
+                aria-pressed={selectedTheme.name === t.name}
                 onClick={() => setSelectedTheme(t)}
                 className={`w-full text-left p-3.5 rounded-lg border transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] group relative ${
                   selectedTheme.name === t.name
@@ -274,11 +278,11 @@ export function ThemePreview() {
 
         {/* 右侧沙盒渲染区 */}
         <div 
-          className="lg:col-span-8 p-8 flex items-center justify-center transition-colors duration-500 min-h-[420px]"
+          className="lg:col-span-8 p-8 flex items-center justify-center transition-colors duration-[var(--duration-medium)] ease-[var(--ease-standard)] min-h-[420px]"
           style={{ backgroundColor: activeVars["--preview-bg-body"] }}
         >
           <div 
-            className="w-full max-w-md p-6 border transition-all duration-500 shadow-md flex flex-col gap-5"
+            className="w-full max-w-md p-6 border transition-all duration-[var(--duration-medium)] ease-[var(--ease-standard)] shadow-md flex flex-col gap-5"
             style={{ 
               backgroundColor: activeVars["--preview-bg-surface"],
               borderColor: activeVars["--preview-border"],
@@ -311,12 +315,13 @@ export function ThemePreview() {
 
             {/* 组件1：输入框 */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold opacity-70">受控输入框 (TextInput)</label>
+              <label htmlFor="sandbox-input" className="text-xs font-semibold opacity-70">受控输入框 (TextInput)</label>
               <input
+                id="sandbox-input"
                 type="text"
                 value={demoInput}
                 onChange={(e) => setDemoInput(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm bg-transparent border outline-none transition-all duration-300 focus:ring-2 focus:ring-offset-1 focus:ring-primary"
+                className="w-full px-3.5 py-2 text-sm bg-transparent border outline-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] focus:ring-2 focus:ring-offset-1 focus:ring-primary"
                 style={{
                   borderColor: activeVars["--preview-border"],
                   borderRadius: `calc(${activeVars["--preview-radius"]} * 0.8)`,
@@ -361,8 +366,9 @@ export function ThemePreview() {
               <div className="flex flex-wrap items-center gap-3">
                 {/* 主操作按钮 */}
                 <button
+                  type="button"
                   onClick={() => setClickCount(c => c + 1)}
-                  className="px-4 py-2 text-sm font-semibold transition-all duration-200 active:scale-95 flex items-center gap-1.5 shadow-sm"
+                  className="px-4 py-2 text-sm font-semibold transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] active:scale-95 flex items-center gap-1.5 shadow-sm"
                   style={{
                     backgroundColor: activeVars["--preview-accent"],
                     color: "#fff",
@@ -375,7 +381,8 @@ export function ThemePreview() {
 
                 {/* 次要操作按钮 */}
                 <button
-                  className="px-4 py-2 text-sm font-medium border transition-all duration-200 active:scale-95 bg-transparent"
+                  type="button"
+                  className="px-4 py-2 text-sm font-medium border transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] active:scale-95 bg-transparent"
                   style={{
                     borderColor: activeVars["--preview-border"],
                     borderRadius: `calc(${activeVars["--preview-radius"]} * 0.8)`,
