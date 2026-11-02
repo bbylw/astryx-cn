@@ -1,11 +1,11 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { DocSidebar } from "@/components/DocSidebar";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button, Drawer } from "@astryxdesign/core";
 import { Menu, Sun, Moon, Home } from "lucide-react";
 
 export default function DocsLayout({
@@ -14,6 +14,7 @@ export default function DocsLayout({
   children: ReactNode;
 }) {
   const { resolvedTheme, setTheme } = useTheme();
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -23,18 +24,25 @@ export default function DocsLayout({
           <div className="flex items-center gap-4">
             {/* 移动端侧边栏触发器 */}
             <div className="lg:hidden">
-              <Sheet>
-                <SheetTrigger
-                  render={
-                    <Button variant="ghost" size="icon" className="h-9 w-9">
-                      <Menu className="h-5 w-5" />
-                    </Button>
-                  }
-                />
-                <SheetContent side="left" className="w-[300px] p-6 bg-background">
-                  <DocSidebar />
-                </SheetContent>
-              </Sheet>
+              <Button
+                variant="ghost"
+                size="sm"
+                isIconOnly
+                label="打开文档导航"
+                icon={<Menu className="h-5 w-5" />}
+                onClick={() => setIsNavOpen(true)}
+                className="h-9 w-9"
+              />
+              <Drawer
+                isOpen={isNavOpen}
+                onOpenChange={setIsNavOpen}
+                side="start"
+                width={300}
+                label="文档导航"
+                padding={4}
+              >
+                <DocSidebar />
+              </Drawer>
             </div>
 
             <Link href="/" className="flex items-center gap-2">
@@ -49,21 +57,24 @@ export default function DocsLayout({
 
           <div className="flex items-center gap-3">
             <Link href="/">
-              <Button variant="ghost" size="sm" className="gap-1.5 h-9 text-xs">
-                <Home className="h-3.5 w-3.5" />
-                返回首页
-              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                label="返回首页"
+                icon={<Home className="h-3.5 w-3.5" />}
+                className="h-9 text-xs"
+              />
             </Link>
 
             <Button
               variant="ghost"
-              size="icon"
-              aria-label="切换深色模式"
+              size="sm"
+              isIconOnly
+              label="切换深色模式"
+              icon={resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-              className="rounded-full w-9 h-9"
-            >
-              {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+              className="rounded-full h-9 w-9"
+            />
           </div>
         </div>
       </header>

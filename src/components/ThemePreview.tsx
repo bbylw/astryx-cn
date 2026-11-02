@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Badge, Button } from "@astryxdesign/core";
 import { Play, Sparkles, RefreshCw } from "lucide-react";
 
 interface ThemeSpec {
@@ -216,25 +215,24 @@ export function ThemePreview() {
         
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
+            label={`切换模式: ${isPreviewDark ? "🌙 深色" : "☀️ 亮色"}`}
             onClick={() => setIsPreviewDark(!isPreviewDark)}
             className="text-xs h-9"
-          >
-            切换模式: {isPreviewDark ? "🌙 深色" : "☀️ 亮色"}
-          </Button>
+          />
           <Button
             variant="ghost"
-            size="icon"
+            size="sm"
+            isIconOnly
+            label="重置沙盒"
+            icon={<RefreshCw className="h-4 w-4" />}
             onClick={() => {
               setClickCount(0);
               setDemoInput("AI-Agent 友好型设计系统");
             }}
             className="h-9 w-9"
-            title="重置沙盒"
-          >
-            <RefreshCw className="h-4 w-4" />
-          </Button>
+          />
         </div>
       </div>
 
@@ -299,16 +297,16 @@ export function ThemePreview() {
                   {selectedTheme.label.split(" ")[0]} Preview
                 </h4>
               </div>
-              <Badge 
+              <Badge
+                variant="neutral"
+                label="Beta v0.7.6"
                 className="text-[10px] font-mono select-none px-2 py-0.5 rounded-full"
-                style={{ 
+                style={{
                   backgroundColor: activeVars["--preview-accent"],
                   color: "#fff",
                   borderRadius: "9999px"
                 }}
-              >
-                Beta v0.7.6
-              </Badge>
+              />
             </div>
 
             {/* 组件1：输入框 */}

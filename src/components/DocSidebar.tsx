@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { sidebarSections } from "@/config/docs";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollableArea } from "@astryxdesign/core";
 import { FileText, ChevronRight } from "lucide-react";
 
 export function DocSidebar() {
@@ -31,7 +31,7 @@ export function DocSidebar() {
         </Link>
       </div>
 
-      <ScrollArea className="flex-1 -mx-3 px-3">
+      <ScrollableArea label="文档目录" className="flex-1 min-h-0 -mx-3 px-3">
         <div className="flex flex-col gap-5 pr-4 pb-8">
           {sidebarSections.map((section) => (
             <div key={section.title} className="flex flex-col gap-1.5">
@@ -66,7 +66,7 @@ export function DocSidebar() {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </ScrollableArea>
     </aside>
   );
 }
