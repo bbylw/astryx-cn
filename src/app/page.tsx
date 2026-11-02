@@ -16,24 +16,25 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button } from "@astryxdesign/core";
 
 export default function Home() {
   const { resolvedTheme, setTheme } = useTheme();
+  const shouldReduceMotion = useReducedMotion();
 
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: shouldReduceMotion ? 0 : 0.15,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 30 },
     show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 15 } },
   };
 
@@ -82,9 +83,14 @@ export default function Home() {
               onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
               className="rounded-full h-9 w-9"
             />
-            <Link href="/docs">
-              <Button variant="primary" size="sm" label="阅读文档" className="font-semibold rounded-full px-5" />
-            </Link>
+            <Button
+              href="/docs"
+              as={Link}
+              variant="primary"
+              size="sm"
+              label="阅读文档"
+              className="font-semibold rounded-full px-5"
+            />
           </div>
         </div>
       </header>
@@ -93,16 +99,16 @@ export default function Home() {
       <main className="flex-1 max-w-7xl mx-auto px-6 py-12 md:py-24 flex flex-col gap-24 relative z-10">
         
         {/* HERO 区域 */}
-        <section className="text-center md:text-left flex flex-col md:flex-row items-center gap-12 pt-6">
-          <div className="flex-1 flex flex-col gap-6 md:pr-6">
-            <div className="inline-flex items-center gap-1.5 self-center md:self-start bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-semibold">
+        <section className="text-center lg:text-left flex flex-col lg:flex-row items-center gap-12 pt-6">
+          <div className="flex-1 lg:flex-[1.15] flex flex-col gap-6 lg:pr-6">
+            <div className="inline-flex items-center gap-1.5 self-center lg:self-start bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-semibold">
               <Sparkles className="h-3 w-3" />
               Meta 内部锤炼 8 年，支撑 13,000+ 个应用
             </div>
             
-            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-foreground">
-              为当下的构建方式而生的 <br />
-              <span className="text-primary">
+            <h1 className="font-heading text-[1.875rem] sm:text-5xl lg:text-[2.75rem] xl:text-[3.4rem] font-black tracking-tight leading-[1.1] text-foreground">
+              为当下的构建方式而生的
+              <span className="mt-1 block text-primary">
                 开源设计系统
               </span>
             </h1>
@@ -111,34 +117,34 @@ export default function Home() {
               一个完全可定制的系统，由<strong>人类设计师</strong>与并肩工作的<strong>人工智能智能体 (AI Agents)</strong> 协同塑造。基于 React 19 与 StyleX，为你提供打破封装的无束缚定制体验。
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-2">
-              <Link href="/docs">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  label="开始使用"
-                  endContent={<ArrowRight className="h-4 w-4" />}
-                  className="rounded-full px-7 font-bold text-base"
-                />
-              </Link>
-              <Link href="#sandbox">
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  label="在线预览主题"
-                  className="rounded-full px-7 font-medium text-base"
-                />
-              </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-2">
+              <Button
+                href="/docs"
+                as={Link}
+                variant="primary"
+                size="lg"
+                label="开始使用"
+                endContent={<ArrowRight className="h-4 w-4" />}
+                className="rounded-full px-7 font-bold text-base"
+              />
+              <Button
+                href="#sandbox"
+                as="a"
+                variant="secondary"
+                size="lg"
+                label="在线预览主题"
+                className="rounded-full px-7 font-medium text-base"
+              />
             </div>
 
-            <div className="flex items-center justify-center md:justify-start gap-6 text-xs text-muted-foreground font-mono mt-4">
+            <div className="flex items-center justify-center lg:justify-start gap-6 text-xs text-muted-foreground font-mono mt-4">
               <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-success" /> 无样式锁定</span>
               <span className="flex items-center gap-1"><Cpu className="h-3.5 w-3.5 text-primary" /> AI 开发者协同</span>
               <span className="flex items-center gap-1"><Layers className="h-3.5 w-3.5 text-chart-3" /> 150+ 无障碍组件</span>
             </div>
           </div>
 
-          <div className="flex-1 w-full max-w-lg md:max-w-none relative aspect-[4/3] rounded-3xl border border-border bg-card/70 backdrop-blur-sm p-6 overflow-hidden flex flex-col justify-between group">
+          <div className="flex-1 lg:flex-[0.85] w-full max-w-lg lg:max-w-none relative aspect-[4/3] text-left rounded-3xl border border-border bg-card/70 backdrop-blur-sm p-6 overflow-hidden flex flex-col justify-between group">
             <div className="absolute top-0 right-0 w-[60%] h-[60%] rounded-full bg-primary/10 blur-[60px]" />
             
             <div className="flex items-center justify-between border-b border-border pb-4">
@@ -155,11 +161,11 @@ export default function Home() {
 
             <div className="flex-1 font-mono text-sm py-4 flex flex-col justify-center gap-3 select-none">
               <div className="text-muted-foreground"># 安装核心包、StyleX 与 Neutral 主题</div>
-              <div className="text-foreground break-all">
+              <div className="text-[13px] leading-relaxed break-words text-foreground">
                 <span className="text-primary">npm</span> install @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral
               </div>
               <div className="text-muted-foreground"># 生成主题模块（CSS 与字体）</div>
-              <div className="text-foreground">
+              <div className="text-[13px] leading-relaxed break-words text-foreground">
                 <span className="text-primary">npx</span> astryx theme add neutral
               </div>
               <div className="text-success font-semibold mt-2 flex items-center gap-1.5">
@@ -175,7 +181,7 @@ export default function Home() {
         </section>
 
         {/* BENTO GRID 特性展示 */}
-        <section id="features" className="flex flex-col gap-12">
+        <section id="features" className="flex flex-col gap-12 scroll-mt-24">
           <div className="text-center max-w-2xl mx-auto flex flex-col gap-4">
             <h2 className="font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
               为什么选择 Astryx？
@@ -285,7 +291,7 @@ export default function Home() {
         </section>
 
         {/* 设计原则对比 Dos & Don'ts */}
-        <section id="principles" className="flex flex-col gap-12">
+        <section id="principles" className="flex flex-col gap-12 scroll-mt-24">
           <div className="text-center max-w-2xl mx-auto flex flex-col gap-4">
             <h2 className="font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
               规范与反模式
@@ -365,14 +371,14 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 min-w-[200px]">
-            <Link href="/docs">
-              <Button
-                variant="primary"
-                size="lg"
-                label="查阅完整文档"
-                className="w-full rounded-full font-bold"
-              />
-            </Link>
+            <Button
+              href="/docs"
+              as={Link}
+              variant="primary"
+              size="lg"
+              label="查阅完整文档"
+              className="w-full rounded-full font-bold"
+            />
           </div>
         </section>
       </main>
@@ -387,6 +393,9 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-6">
+            <a href="https://github.com/meta/astryx" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+              GitHub
+            </a>
             <a href="https://stylexjs.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
               StyleX
             </a>

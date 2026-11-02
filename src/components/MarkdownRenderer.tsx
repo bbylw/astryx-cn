@@ -189,12 +189,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             variant="ghost"
             isIconOnly
             label="复制代码"
+            tooltip={copied ? "已复制" : "复制代码"}
             icon={copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
             onClick={handleCopy}
             className="h-6 w-6 text-muted-foreground"
           />
         </div>
-        <pre className="p-4 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed text-foreground">
+        <pre className="p-4 font-mono text-xs sm:text-sm whitespace-pre-wrap break-words overflow-x-auto leading-relaxed text-foreground">
           <code>{code}</code>
         </pre>
       </div>

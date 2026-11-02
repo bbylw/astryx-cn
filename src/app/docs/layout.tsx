@@ -41,7 +41,10 @@ export default function DocsLayout({
                 label="文档导航"
                 padding={4}
               >
-                <DocSidebar />
+                <DocSidebar
+                  onNavigate={() => setIsNavOpen(false)}
+                  onClose={() => setIsNavOpen(false)}
+                />
               </Drawer>
             </div>
 
@@ -49,22 +52,22 @@ export default function DocsLayout({
               <span className="font-heading text-lg font-black tracking-tight">
                 Astryx
               </span>
-              <span className="text-[10px] bg-muted text-muted-foreground font-bold px-1.5 py-0.5 rounded">
+              <span className="text-[10px] bg-accent text-accent-foreground font-bold px-1.5 py-0.5 rounded">
                 Docs
               </span>
             </Link>
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/">
-              <Button
-                variant="ghost"
-                size="sm"
-                label="返回首页"
-                icon={<Home className="h-3.5 w-3.5" />}
-                className="h-9 text-xs"
-              />
-            </Link>
+            <Button
+              href="/"
+              as={Link}
+              variant="ghost"
+              size="sm"
+              label="返回首页"
+              icon={<Home className="h-3.5 w-3.5" />}
+              className="h-9 text-xs"
+            />
 
             <Button
               variant="ghost"
@@ -82,7 +85,7 @@ export default function DocsLayout({
       {/* 双列布局 */}
       <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 flex gap-8 relative">
         {/* 左侧固定侧边栏 - 仅桌面端显示 */}
-        <div className="hidden lg:block w-[260px] shrink-0 sticky top-24 h-[calc(100vh-8rem)] pt-2 overflow-y-auto">
+        <div className="hidden lg:block w-[260px] shrink-0 sticky top-24 h-[calc(100vh-8rem)] pt-2">
           <DocSidebar />
         </div>
 

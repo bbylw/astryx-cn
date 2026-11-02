@@ -41,6 +41,7 @@ export function CodeBlock({ npm, pnpm, yarn, bun }: CodeBlockProps) {
           size="sm"
           layout="hug"
           aria-label="选择包管理器"
+          className="font-mono"
         >
           {packageManagers.map((pm) => (
             <Tab key={pm} value={pm} label={pm} />
@@ -52,14 +53,15 @@ export function CodeBlock({ npm, pnpm, yarn, bun }: CodeBlockProps) {
           size="sm"
           isIconOnly
           label="复制代码"
+          tooltip={copied ? "已复制" : "复制代码"}
           icon={copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
           onClick={handleCopy}
           className="h-7 w-7 text-muted-foreground"
         />
       </div>
 
-      <div className="p-4 font-mono text-sm overflow-x-auto leading-relaxed text-foreground">
-        <pre className="m-0">
+      <div className="p-4 font-mono text-sm leading-relaxed text-foreground">
+        <pre className="m-0 whitespace-pre-wrap break-words">
           <code className="text-xs sm:text-sm">{commands[activeTab]}</code>
         </pre>
       </div>

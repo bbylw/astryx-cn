@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { docsData } from "@/config/docs";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 import { notFound } from "next/navigation";
@@ -7,6 +8,28 @@ export async function generateStaticParams() {
   return Object.keys(docsData).map((slug) => ({
     slug,
   }));
+}
+
+export async function generateMetadata(
+  props: PageProps<"/docs/[slug]">
+): Promise<Metadata> {
+  const { slug } = await props.params;
+  const doc = docsData[slug];
+  if (!doc) return {};
+  return {
+    title: doc.title,
+    description: doc.description,
+    alternates: {
+      canonical: `/docs/${slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title: doc.title,
+      description: doc.description,
+      url: `/docs/${slug}`,
+      images: ["/og.png"],
+    },
+  };
 }
 
 export default async function DocItemPage(props: PageProps<"/docs/[slug]">) {
