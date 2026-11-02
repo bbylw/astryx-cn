@@ -17,7 +17,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { Button } from "@astryxdesign/core";
 
 export default function Home() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -75,17 +75,15 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
-              size="icon"
-              aria-label="切换深色模式"
+              size="sm"
+              isIconOnly
+              label="切换深色模式"
+              icon={resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-              className="rounded-full w-9 h-9"
-            >
-              {resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+              className="rounded-full h-9 w-9"
+            />
             <Link href="/docs">
-              <Button size="sm" className="font-semibold rounded-full px-5">
-                阅读文档
-              </Button>
+              <Button variant="primary" size="sm" label="阅读文档" className="font-semibold rounded-full px-5" />
             </Link>
           </div>
         </div>
@@ -115,14 +113,21 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-2">
               <Link href="/docs">
-                <Button size="lg" className="rounded-full px-7 font-bold gap-2 text-base">
-                  开始使用 <ArrowRight className="h-4 w-4" />
-                </Button>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  label="开始使用"
+                  endContent={<ArrowRight className="h-4 w-4" />}
+                  className="rounded-full px-7 font-bold text-base"
+                />
               </Link>
               <Link href="#sandbox">
-                <Button size="lg" variant="outline" className="rounded-full px-7 font-medium text-base">
-                  在线预览主题
-                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  label="在线预览主题"
+                  className="rounded-full px-7 font-medium text-base"
+                />
               </Link>
             </div>
 
@@ -361,9 +366,12 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-3 min-w-[200px]">
             <Link href="/docs">
-              <Button size="lg" className="w-full rounded-full font-bold gap-2">
-                查阅完整文档
-              </Button>
+              <Button
+                variant="primary"
+                size="lg"
+                label="查阅完整文档"
+                className="w-full rounded-full font-bold"
+              />
             </Link>
           </div>
         </section>

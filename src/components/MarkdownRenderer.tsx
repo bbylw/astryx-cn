@@ -2,7 +2,7 @@
 
 import React from "react";
 import { CodeBlock } from "./CodeBlock";
-import { Button } from "@/components/ui/button";
+import { Button } from "@astryxdesign/core";
 import { Check, Copy } from "lucide-react";
 
 interface MarkdownRendererProps {
@@ -185,13 +185,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-1.5">
           <span className="text-[11px] font-mono text-muted-foreground uppercase">{lang || "code"}</span>
           <Button
-            size="icon"
+            size="sm"
             variant="ghost"
+            isIconOnly
+            label="复制代码"
+            icon={copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
             onClick={handleCopy}
-            className="h-6 w-6 text-muted-foreground hover:text-foreground"
-          >
-            {copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
-          </Button>
+            className="h-6 w-6 text-muted-foreground"
+          />
         </div>
         <pre className="p-4 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed text-foreground">
           <code>{code}</code>
