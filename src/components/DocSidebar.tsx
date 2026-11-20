@@ -32,7 +32,7 @@ export function DocSidebar({
           <span className="font-heading text-lg font-black tracking-tight hover:opacity-85 transition-opacity">
             Astryx Docs
           </span>
-          <span className="text-[10px] bg-accent text-accent-foreground font-bold px-1.5 py-0.5 rounded">
+          <span className="text-[0.625rem] bg-accent text-accent-foreground font-bold px-1.5 py-0.5 rounded">
             中文版
           </span>
         </Link>
@@ -53,9 +53,9 @@ export function DocSidebar({
         <div className="flex flex-col gap-5 pr-4 pb-8">
           {sidebarSections.map((section) => (
             <div key={section.title} className="flex flex-col gap-1.5">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/80 px-3 py-1">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground px-3 py-1">
                 {section.title}
-              </h4>
+              </p>
               <ul className="flex flex-col gap-0.5 list-none m-0 p-0">
                 {section.items.map((item) => {
                   const isActive = activeSlug === item.slug;
@@ -72,7 +72,7 @@ export function DocSidebar({
                         }`}
                       >
                         <FileText className={`h-4 w-4 shrink-0 transition-colors ${
-                          isActive ? "text-primary" : "text-muted-foreground/60 group-hover:text-muted-foreground"
+                          isActive ? "text-primary" : "text-muted-foreground"
                         }`} />
                         <span className="truncate">{item.title}</span>
                         {isActive && (

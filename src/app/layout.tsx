@@ -79,6 +79,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <a href="#content" className="skip-link">
+            跳到主要内容
+          </a>
           {children}
         </ThemeProvider>
       </body>
