@@ -1,8 +1,9 @@
 "use client";
 
+import { useState, type HTMLAttributes } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { ThemePreview } from "@/components/ThemePreview";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   ArrowRight,
   Terminal,
@@ -11,32 +12,21 @@ import {
   Palette,
   Sparkles,
   ShieldCheck,
-  Moon,
-  Sun,
+  Menu,
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Button } from "@astryxdesign/core";
+import { Button, Drawer } from "@astryxdesign/core";
+
+const navLinks = [
+  { href: "#features", label: "特性优势" },
+  { href: "#sandbox", label: "主题沙盒" },
+  { href: "#principles", label: "设计原则" },
+  { href: "/docs", label: "快速开始" },
+];
 
 export default function Home() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const shouldReduceMotion = useReducedMotion();
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: shouldReduceMotion ? 0 : 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 30 },
-    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 15 } },
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden">
@@ -59,30 +49,49 @@ export default function Home() {
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-              特性优势
-            </Link>
-            <Link href="#sandbox" className="text-muted-foreground hover:text-foreground transition-colors">
-              主题沙盒
-            </Link>
-            <Link href="#principles" className="text-muted-foreground hover:text-foreground transition-colors">
-              设计原则
-            </Link>
-            <Link href="/docs" className="text-muted-foreground hover:text-foreground transition-colors">
-              快速开始
-            </Link>
+            {navLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              isIconOnly
-              label="切换深色模式"
-              icon={resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-              className="rounded-full h-9 w-9"
-            />
+            {/* 移动端导航：与桌面端同一组链接，收进抽屉（navbar：collapsed 是默认态） */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                isIconOnly
+                label="打开站内导航"
+                {...({ "aria-expanded": isMenuOpen, "aria-controls": "site-menu" } as HTMLAttributes<HTMLElement>)}
+                icon={<Menu className="h-5 w-5" />}
+                onClick={() => setIsMenuOpen(true)}
+                className="min-h-9 min-w-9"
+              />
+              <Drawer
+                isOpen={isMenuOpen}
+                onOpenChange={setIsMenuOpen}
+                side="end"
+                width={280}
+                label="站内导航"
+                padding={4}
+              >
+                <nav id="site-menu" aria-label="主导航" className="flex flex-col gap-1 p-2">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+              </Drawer>
+            </div>
+            <ThemeToggle />
             <Button
               href="/docs"
               as={Link}
@@ -96,7 +105,7 @@ export default function Home() {
       </header>
 
       {/* 主体页面内容 */}
-      <main className="flex-1 max-w-7xl mx-auto px-6 py-12 md:py-24 flex flex-col gap-24 relative z-10">
+      <main id="content" tabIndex={-1} className="flex-1 max-w-7xl mx-auto px-6 py-12 md:py-24 flex flex-col gap-24 relative z-10 outline-none">
         
         {/* HERO 区域 */}
         <section className="text-center lg:text-left flex flex-col lg:flex-row items-center gap-12 pt-6">
@@ -159,13 +168,13 @@ export default function Home() {
               <Terminal className="h-4 w-4 text-muted-foreground" />
             </div>
 
-            <div className="flex-1 font-mono text-sm py-4 flex flex-col justify-center gap-3 select-none">
+            <div className="flex-1 font-mono text-sm py-4 flex flex-col justify-center gap-3">
               <div className="text-muted-foreground"># 安装核心包、StyleX 与 Neutral 主题</div>
-              <div className="text-[13px] leading-relaxed break-words text-foreground">
+              <div className="text-[0.8125rem] leading-relaxed break-words text-foreground">
                 <span className="text-primary">npm</span> install @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral
               </div>
               <div className="text-muted-foreground"># 生成主题模块（CSS 与字体）</div>
-              <div className="text-[13px] leading-relaxed break-words text-foreground">
+              <div className="text-[0.8125rem] leading-relaxed break-words text-foreground">
                 <span className="text-primary">npx</span> astryx theme add neutral
               </div>
               <div className="text-success font-semibold mt-2 flex items-center gap-1.5">
@@ -191,17 +200,9 @@ export default function Home() {
             </p>
           </div>
 
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-12 gap-6"
-          >
+          <div className="bento-reveal grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* 卡片 1: 开放内部结构 */}
-            <motion.div 
-              variants={itemVariants} 
-              className="md:col-span-8 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
+            <div className="md:col-span-8 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
                 <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-accent-foreground">
@@ -215,12 +216,10 @@ export default function Home() {
               <div className="mt-8 border border-border/60 rounded-lg bg-muted/40 p-4 font-mono text-xs text-muted-foreground">
                 <span className="text-primary">npx</span> astryx swizzle Button
               </div>
-            </motion.div>
+            </div>
 
             {/* 卡片 2: 无样式锁定 */}
-            <motion.div 
-              variants={itemVariants} 
-              className="md:col-span-4 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
+            <div className="md:col-span-4 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
                 <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-secondary-foreground">
@@ -232,12 +231,10 @@ export default function Home() {
                 </p>
               </div>
               <span className="text-xs text-muted-foreground font-mono mt-8">className=&quot;bg-surface text-primary&quot;</span>
-            </motion.div>
+            </div>
 
             {/* 卡片 3: 人机协同共建 */}
-            <motion.div 
-              variants={itemVariants} 
-              className="md:col-span-5 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
+            <div className="md:col-span-5 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
                 <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-accent-foreground">
@@ -249,12 +246,10 @@ export default function Home() {
                 </p>
               </div>
               <span className="text-xs text-muted-foreground font-mono mt-8">支持 Claude, Copilot, Cursor 等大模型</span>
-            </motion.div>
+            </div>
 
             {/* 卡片 4: 语义化主题系统 */}
-            <motion.div 
-              variants={itemVariants} 
-              className="md:col-span-7 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
+            <div className="md:col-span-7 group relative rounded-3xl border border-border bg-card p-8 flex flex-col justify-between overflow-hidden hover:shadow-lg transition-shadow duration-[var(--duration-medium)] ease-[var(--ease-standard)]"
             >
               <div className="flex flex-col gap-4">
                 <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-secondary-foreground">
@@ -272,8 +267,8 @@ export default function Home() {
                   </span>
                 ))}
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </section>
 
         {/* 交互式主题沙盒预览 */}

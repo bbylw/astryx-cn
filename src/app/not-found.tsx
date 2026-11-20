@@ -42,14 +42,14 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row items-center gap-3 mt-2 w-full sm:w-auto">
           <Link
             href="/"
-            className="inline-flex h-11 w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+            className="inline-flex min-h-11 w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
           >
             <Home className="h-4 w-4" />
             返回首页
           </Link>
           <Link
             href="/docs/getting-started"
-            className="inline-flex h-11 w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-border bg-card px-6 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+            className="inline-flex min-h-11 w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-border bg-card px-6 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
           >
             <Compass className="h-4 w-4" />
             浏览文档

@@ -4,6 +4,7 @@ import React from "react";
 import { CodeBlock } from "./CodeBlock";
 import { Button } from "@astryxdesign/core";
 import { Check, Copy } from "lucide-react";
+import { useCopyFeedback } from "./useCopyFeedback";
 
 interface MarkdownRendererProps {
   content: string;
@@ -145,7 +146,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         return (
           <code
             key={index}
-            className="bg-muted text-foreground/90 px-1.5 py-0.5 rounded text-xs sm:text-[13px] font-mono font-semibold"
+            className="bg-muted text-foreground/90 px-1.5 py-0.5 rounded text-xs sm:text-[0.8125rem] font-mono font-semibold"
           >
             {part.slice(1, -1)}
           </code>
@@ -170,30 +171,33 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   };
 
   const blocks = parseBlocks(content);
+  const tableIdBase = React.useId();
 
   // 辅助组件：普通的单代码块渲染（带复制按钮）
   const SingleCode = ({ code, lang }: { code: string; lang?: string }) => {
-    const [copied, setCopied] = React.useState(false);
-    const handleCopy = () => {
-      navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    };
+    const { message, copied, copy } = useCopyFeedback();
+    // 可及名指向被复制的内容，避免整页多个同名"复制代码"按钮无法区分
+    const snippet = code.trim().split("\n")[0].slice(0, 40);
 
     return (
       <div className="relative my-5 rounded-xl border border-border bg-muted/40 backdrop-blur-sm overflow-hidden group">
         <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-1.5">
-          <span className="text-[11px] font-mono text-muted-foreground uppercase">{lang || "code"}</span>
-          <Button
-            size="sm"
-            variant="ghost"
-            isIconOnly
-            label="复制代码"
-            tooltip={copied ? "已复制" : "复制代码"}
-            icon={copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
-            onClick={handleCopy}
-            className="h-6 w-6 text-muted-foreground"
-          />
+          <span className="text-[0.6875rem] font-mono text-muted-foreground uppercase">{lang || "code"}</span>
+          <span className="relative inline-flex">
+            <Button
+              size="sm"
+              variant="ghost"
+              isIconOnly
+              label={`复制代码：${snippet}`}
+              icon={copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
+              onClick={() => copy(code)}
+              className="min-h-6 min-w-6 text-muted-foreground"
+            />
+            {/* 反馈气泡即 live region，放在按钮外部 */}
+            <span className="copy-status" role="status">
+              {message}
+            </span>
+          </span>
         </div>
         <pre className="p-4 font-mono text-xs sm:text-sm whitespace-pre-wrap break-words overflow-x-auto leading-relaxed text-foreground">
           <code>{code}</code>
@@ -211,33 +215,21 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             if (!hMatch) return null;
             const level = hMatch[1].length;
             const text = hMatch[2];
-            
-            // h1, h2, h3, etc.
-            if (level === 1) {
-              return (
-                <h1 key={index} className="font-heading text-3xl font-extrabold tracking-tight mt-8 mb-4 border-b border-border/40 pb-2">
-                  {renderInlineText(text)}
-                </h1>
-              );
-            }
-            if (level === 2) {
-              return (
-                <h2 key={index} className="font-heading text-2xl font-bold tracking-tight mt-8 mb-4 border-b border-border/40 pb-2">
-                  {renderInlineText(text)}
-                </h2>
-              );
-            }
-            if (level === 3) {
-              return (
-                <h3 key={index} className="font-heading text-xl font-bold tracking-tight mt-6 mb-3">
-                  {renderInlineText(text)}
-                </h3>
-              );
-            }
+            // 页面标题已是 h1：markdown 层级整体下移一级（### → h2、#### → h3），
+            // 保持连续不跳级的大纲；视觉样式仍按原 markdown 层级
+            const Tag = `h${Math.min(4, Math.max(2, level - 1))}` as "h2" | "h3" | "h4";
+            const headingClass =
+              level === 1
+                ? "font-heading text-3xl font-extrabold tracking-tight mt-8 mb-4 border-b border-border/40 pb-2"
+                : level === 2
+                  ? "font-heading text-2xl font-bold tracking-tight mt-8 mb-4 border-b border-border/40 pb-2"
+                  : level === 3
+                    ? "font-heading text-xl font-bold tracking-tight mt-6 mb-3"
+                    : "font-heading text-lg font-semibold tracking-tight mt-4 mb-2";
             return (
-              <h4 key={index} className="font-heading text-lg font-semibold tracking-tight mt-4 mb-2">
+              <Tag key={index} className={headingClass}>
                 {renderInlineText(text)}
-              </h4>
+              </Tag>
             );
           }
           case "paragraph": {
@@ -319,13 +311,23 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                 .filter((_, idx) => idx > 0 && idx <= headers.length)
             );
 
+            const captionId = `${tableIdBase}-${index}`;
             return (
-              <div key={index} className="my-6 w-full overflow-x-auto border border-border rounded-xl">
+              <div
+                key={index}
+                className="my-6 w-full overflow-x-auto border border-border rounded-xl"
+                tabIndex={0}
+                role="region"
+                aria-labelledby={captionId}
+              >
                 <table className="w-full text-sm border-collapse text-left">
+                  <caption id={captionId} className="sr-only">
+                    {headers.join("、")}
+                  </caption>
                   <thead className="bg-muted/40 font-semibold border-b border-border/60">
                     <tr>
                       {headers.map((h, idx) => (
-                        <th key={idx} className="px-4 py-3 font-medium text-foreground">
+                        <th key={idx} scope="col" className="px-4 py-3 font-medium text-foreground">
                           {renderInlineText(h)}
                         </th>
                       ))}

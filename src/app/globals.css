@@ -118,3 +118,202 @@
     @apply font-sans;
   }
 }
+
+/* ===== modern-web-guidance 优化（顶层规则，不进组件层） ===== */
+
+/* dark-mode：根元素决定整个 viewport 的 scheme（滚动条/表单控件/canvas 底色） */
+:root {
+  color-scheme: light dark;
+}
+:root.dark {
+  color-scheme: dark;
+}
+:root.light {
+  color-scheme: light;
+}
+/* JS 未加载时仍跟随系统偏好 */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) {
+    color-scheme: dark;
+  }
+}
+
+/* state-aware-sticky-headers：锚点跳转与键盘焦点避开 sticky 头（WCAG 2.4.11） */
+html {
+  --header-height: 4rem; /* h-16 */
+  scroll-padding-top: calc(var(--header-height) + 1rem);
+}
+
+/* accessibility：跳到主要内容（2.4.1 Bypass Blocks） */
+.skip-link {
+  position: absolute;
+  inset-inline-start: 0.5rem;
+  inset-block-start: -4rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-element);
+  background: var(--color-background-card);
+  color: var(--color-text-primary);
+  transition: inset-block-start var(--duration-fast) var(--ease-standard);
+}
+.skip-link:focus-visible {
+  inset-block-start: 0.5rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}
+
+/* dark-mode-toggle：双状态都进 markup，由 CSS 选非活跃项，无 JS 时也正确 */
+.theme-toggle .to-dark {
+  display: inline-flex;
+}
+.theme-toggle .to-light {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  .theme-toggle .to-dark {
+    display: none;
+  }
+  .theme-toggle .to-light {
+    display: inline-flex;
+  }
+}
+:root.light .theme-toggle .to-dark {
+  display: inline-flex;
+}
+:root.light .theme-toggle .to-light {
+  display: none;
+}
+:root.dark .theme-toggle .to-dark {
+  display: none;
+}
+:root.dark .theme-toggle .to-light {
+  display: inline-flex;
+}
+
+/* scroll-entry-exit-effects：原生 CSS 滚动驱动入场（装饰性，不支持时直接显示静态内容） */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes reveal-up {
+      from {
+        opacity: 0;
+        translate: 0 30px;
+      }
+    }
+    .bento-reveal > * {
+      animation: reveal-up auto linear backwards;
+      /* timeline/range 必须在 animation 简写之后声明，否则被简写重置 */
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
+/* copy-button：反馈气泡即 live region；用 opacity 显隐，保持在无障碍树内 */
+.copy-status {
+  position: absolute;
+  inset-inline-end: calc(100% + 0.5rem);
+  inset-block-start: 50%;
+  translate: 0 -50%;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+  pointer-events: none;
+}
+.copy-status:not(:empty) {
+  opacity: 1;
+}
+
+/* accessibility：forced-colors 下 box-shadow 被移除，用系统色 outline 重绘焦点环 */
+@media (forced-colors: active) {
+  :where(button, a, input, [tabindex]):focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+/* prevent-page-scroll-under-modal-dialog：阻断 backdrop 上的滚动链（渐进增强） */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* component-specific-light-dark-theme：主题沙盒是自带 scheme 的子树。
+   继承型 color 属性（accent-color/caret-color）必须在 scheme 覆写处重新声明。
+   状态徽章色先给 light 默认值 + data 属性暗色覆写作为 fallback，
+   支持 light-dark() 的浏览器改由子树 color-scheme 解析。 */
+.preview-root {
+  accent-color: var(--preview-accent);
+  caret-color: var(--preview-accent);
+  --badge-success-border: rgb(13 134 38 / 0.3);
+  --badge-success-bg: rgb(13 134 38 / 0.08);
+  --badge-success-text: #0d8626;
+  --badge-danger-border: rgb(227 25 59 / 0.3);
+  --badge-danger-bg: rgb(227 25 59 / 0.08);
+  --badge-danger-text: #e3193b;
+}
+.preview-root[data-preview-dark] {
+  --badge-success-border: rgb(13 134 38 / 0.45);
+  --badge-success-bg: rgb(13 134 38 / 0.18);
+  --badge-success-text: #4ccb65;
+  --badge-danger-border: rgb(245 57 79 / 0.4);
+  --badge-danger-bg: rgb(245 57 79 / 0.12);
+  --badge-danger-text: #f5394f;
+}
+@supports (color: light-dark(white, black)) {
+  .preview-root {
+    --badge-success-border: light-dark(rgb(13 134 38 / 0.3), rgb(13 134 38 / 0.45));
+    --badge-success-bg: light-dark(rgb(13 134 38 / 0.08), rgb(13 134 38 / 0.18));
+    --badge-success-text: light-dark(#0d8626, #4ccb65);
+    --badge-danger-border: light-dark(rgb(227 25 59 / 0.3), rgb(245 57 79 / 0.4));
+    --badge-danger-bg: light-dark(rgb(227 25 59 / 0.08), rgb(245 57 79 / 0.12));
+    --badge-danger-text: light-dark(#e3193b, #f5394f);
+  }
+}
+.preview-badge {
+  border: 1px solid;
+  border-radius: var(--preview-radius);
+}
+.preview-badge-success {
+  border-color: var(--badge-success-border);
+  background: var(--badge-success-bg);
+  color: var(--badge-success-text);
+}
+.preview-badge-danger {
+  border-color: var(--badge-danger-border);
+  background: var(--badge-danger-bg);
+  color: var(--badge-danger-text);
+}
+/* accessibility：焦点环用 outline（box-shadow 在高对比度模式下会消失） */
+.preview-input:focus-visible {
+  outline: 2px solid var(--preview-accent);
+  outline-offset: 2px;
+}
+
+/* color：低对比设计在用户要求更高对比时补强 */
+@media (prefers-contrast: more) {
+  :root {
+    --border: var(--color-border-emphasized);
+    --muted-foreground: var(--color-text-primary);
+  }
+}
+
+/* form-factor-adaptation：粗指针下给紧凑自绘控件扩展触摸热区（WCAG 2.5.8） */
+@media (pointer: coarse) {
+  .hit-pad {
+    position: relative;
+  }
+  .hit-pad::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+  }
+}

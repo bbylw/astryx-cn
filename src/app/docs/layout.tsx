@@ -1,19 +1,18 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ReactNode, HTMLAttributes } from "react";
 import { useState } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { DocSidebar } from "@/components/DocSidebar";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button, Drawer } from "@astryxdesign/core";
-import { Menu, Sun, Moon, Home } from "lucide-react";
+import { Menu, Home } from "lucide-react";
 
 export default function DocsLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const { resolvedTheme, setTheme } = useTheme();
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   return (
@@ -29,9 +28,10 @@ export default function DocsLayout({
                 size="sm"
                 isIconOnly
                 label="打开文档导航"
+                {...({ "aria-expanded": isNavOpen, "aria-controls": "docs-nav-drawer" } as HTMLAttributes<HTMLElement>)}
                 icon={<Menu className="h-5 w-5" />}
                 onClick={() => setIsNavOpen(true)}
-                className="h-9 w-9"
+                className="min-h-9 min-w-9"
               />
               <Drawer
                 isOpen={isNavOpen}
@@ -41,10 +41,12 @@ export default function DocsLayout({
                 label="文档导航"
                 padding={4}
               >
-                <DocSidebar
-                  onNavigate={() => setIsNavOpen(false)}
-                  onClose={() => setIsNavOpen(false)}
-                />
+                <div id="docs-nav-drawer">
+                  <DocSidebar
+                    onNavigate={() => setIsNavOpen(false)}
+                    onClose={() => setIsNavOpen(false)}
+                  />
+                </div>
               </Drawer>
             </div>
 
@@ -52,7 +54,7 @@ export default function DocsLayout({
               <span className="font-heading text-lg font-black tracking-tight">
                 Astryx
               </span>
-              <span className="text-[10px] bg-accent text-accent-foreground font-bold px-1.5 py-0.5 rounded">
+              <span className="text-[0.625rem] bg-accent text-accent-foreground font-bold px-1.5 py-0.5 rounded">
                 Docs
               </span>
             </Link>
@@ -66,18 +68,10 @@ export default function DocsLayout({
               size="sm"
               label="返回首页"
               icon={<Home className="h-3.5 w-3.5" />}
-              className="h-9 text-xs"
+              className="min-h-9 text-xs"
             />
 
-            <Button
-              variant="ghost"
-              size="sm"
-              isIconOnly
-              label="切换深色模式"
-              icon={resolvedTheme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-              className="rounded-full h-9 w-9"
-            />
+            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -90,7 +84,7 @@ export default function DocsLayout({
         </div>
 
         {/* 右侧主文档区域 */}
-        <main className="flex-1 min-w-0 py-8 lg:py-10 max-w-3xl">
+        <main id="content" tabIndex={-1} className="flex-1 min-w-0 py-8 lg:py-10 max-w-3xl outline-none">
           {children}
         </main>
       </div>

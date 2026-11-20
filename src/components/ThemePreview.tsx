@@ -194,11 +194,9 @@ export function ThemePreview() {
 
   const activeVars = isPreviewDark ? selectedTheme.darkCssVars : selectedTheme.cssVars;
 
-  // 将主题变量应用为 inline style 对象
-  const containerStyle = {
-    ...activeVars,
-    fontFamily: selectedTheme.name === "chocolate" ? "Georgia, serif" : "var(--font-sans)",
-  } as React.CSSProperties;
+  // 将主题变量应用为 inline style 对象（均为令牌引用；字体族走类名分支）
+  const containerStyle = { ...activeVars } as React.CSSProperties;
+  const fontClass = selectedTheme.name === "chocolate" ? "font-serif" : "font-sans";
 
   return (
     <div className="w-full max-w-5xl mx-auto rounded-3xl border border-border overflow-hidden shadow-2xl bg-card">
@@ -277,12 +275,16 @@ export function ThemePreview() {
         </div>
 
         {/* 右侧沙盒渲染区 */}
-        <div 
-          className="lg:col-span-8 p-8 flex items-center justify-center transition-colors duration-[var(--duration-medium)] ease-[var(--ease-standard)] min-h-[420px]"
-          style={{ backgroundColor: activeVars["--preview-bg-body"] }}
+        <div
+          className="preview-root lg:col-span-8 p-8 flex items-center justify-center transition-colors duration-[var(--duration-medium)] ease-[var(--ease-standard)] min-h-[420px]"
+          data-preview-dark={isPreviewDark || undefined}
+          style={{
+            backgroundColor: activeVars["--preview-bg-body"],
+            colorScheme: isPreviewDark ? "dark" : "light",
+          }}
         >
-          <div 
-            className="w-full max-w-md p-6 border transition-all duration-[var(--duration-medium)] ease-[var(--ease-standard)] shadow-md flex flex-col gap-5"
+          <div
+            className={`w-full max-w-md p-6 border transition-all duration-[var(--duration-medium)] ease-[var(--ease-standard)] shadow-md flex flex-col gap-5 ${fontClass}`}
             style={{ 
               backgroundColor: activeVars["--preview-bg-surface"],
               borderColor: activeVars["--preview-border"],
@@ -294,7 +296,7 @@ export function ThemePreview() {
             {/* 卡片头部 */}
             <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: activeVars["--preview-border"] }}>
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase font-semibold tracking-wider opacity-60">
+                <span className="text-[0.625rem] uppercase font-semibold tracking-wider opacity-60">
                   Astryx Component
                 </span>
                 <h4 className="text-base font-bold tracking-tight">
@@ -304,7 +306,7 @@ export function ThemePreview() {
               <Badge
                 variant="neutral"
                 label="Beta v0.7.16"
-                className="text-[10px] font-mono select-none px-2 py-0.5 rounded-full"
+                className="text-[0.625rem] font-mono select-none px-2 py-0.5 rounded-full"
                 style={{
                   backgroundColor: activeVars["--preview-accent"],
                   color: "#fff",
@@ -321,7 +323,7 @@ export function ThemePreview() {
                 type="text"
                 value={demoInput}
                 onChange={(e) => setDemoInput(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm bg-transparent border outline-none transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] focus:ring-2 focus:ring-offset-1 focus:ring-primary"
+                className="preview-input w-full px-3.5 py-2 text-sm bg-transparent border transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)]"
                 style={{
                   borderColor: activeVars["--preview-border"],
                   borderRadius: `calc(${activeVars["--preview-radius"]} * 0.8)`,
@@ -334,27 +336,11 @@ export function ThemePreview() {
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold opacity-70">状态反馈 (Badge)</label>
               <div className="flex flex-wrap gap-2">
-                <span 
-                  className="text-xs px-2.5 py-1 font-medium border flex items-center gap-1.5"
-                  style={{
-                    borderColor: "rgba(13, 134, 38, 0.3)",
-                    backgroundColor: "rgba(13, 134, 38, 0.08)",
-                    color: "#0D8626",
-                    borderRadius: activeVars["--preview-radius"],
-                  }}
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#0D8626] animate-pulse" />
+                <span className="preview-badge preview-badge-success text-xs px-2.5 py-1 font-medium flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse motion-reduce:animate-none" />
                   正常运行
                 </span>
-                <span 
-                  className="text-xs px-2.5 py-1 font-medium border flex items-center gap-1.5"
-                  style={{
-                    borderColor: "rgba(227, 25, 59, 0.3)",
-                    backgroundColor: "rgba(227, 25, 59, 0.08)",
-                    color: isPreviewDark ? "#F5394F" : "#E3193B",
-                    borderRadius: activeVars["--preview-radius"],
-                  }}
-                >
+                <span className="preview-badge preview-badge-danger text-xs px-2.5 py-1 font-medium flex items-center gap-1.5">
                   故障警告
                 </span>
               </div>
@@ -368,7 +354,7 @@ export function ThemePreview() {
                 <button
                   type="button"
                   onClick={() => setClickCount(c => c + 1)}
-                  className="px-4 py-2 text-sm font-semibold transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] active:scale-95 flex items-center gap-1.5 shadow-sm"
+                  className="hit-pad px-4 py-2 text-sm font-semibold transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] active:scale-95 motion-reduce:active:scale-100 flex items-center gap-1.5 shadow-sm"
                   style={{
                     backgroundColor: activeVars["--preview-accent"],
                     color: "#fff",
@@ -382,7 +368,7 @@ export function ThemePreview() {
                 {/* 次要操作按钮 */}
                 <button
                   type="button"
-                  className="px-4 py-2 text-sm font-medium border transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] active:scale-95 bg-transparent"
+                  className="hit-pad px-4 py-2 text-sm font-medium border transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] active:scale-95 motion-reduce:active:scale-100 bg-transparent"
                   style={{
                     borderColor: activeVars["--preview-border"],
                     borderRadius: `calc(${activeVars["--preview-radius"]} * 0.8)`,
