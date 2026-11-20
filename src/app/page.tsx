@@ -175,7 +175,7 @@ export default function Home() {
 
             <div className="border-t border-border pt-4 flex items-center justify-between">
               <span className="text-xs text-muted-foreground">支持 npm, pnpm, yarn, bun 等包管理</span>
-              <span className="text-xs text-muted-foreground font-mono">v0.7.6</span>
+              <span className="text-xs text-muted-foreground font-mono">v0.7.16</span>
             </div>
           </div>
         </section>

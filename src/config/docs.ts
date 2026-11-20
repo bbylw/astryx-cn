@@ -93,6 +93,19 @@ npx astryx init
 
 ---
 
+### 升级
+
+用一条命令把应用列出的所有 Astryx 包升级到同一个 release。每个主题都声明了它所匹配的精确 Core 版本，停留在旧 release 的主题会与新的 Core 不匹配：
+
+\`\`\`bash
+npm install @astryxdesign/core@latest @astryxdesign/theme-neutral@latest @astryxdesign/cli@latest
+npx astryx upgrade --from <旧 Core 版本> --apply
+\`\`\`
+
+把应用列出的其他 Astryx 包也加进同一条安装命令，并把升级前的 Core 版本传给 \`--from\`。如果包管理器会暂缓新发布的版本，请豁免整个 \`@astryxdesign/*\` scope；pnpm 中配置 \`minimumReleaseAgeExclude: ['@astryxdesign/*']\`。只豁免其中一部分包会导致装到不同 release 的包混在一起。
+
+---
+
 ### 只安装一次，随处可用
 
 也建议为自己的电脑全局安装 CLI。这样即使当前还没有项目，\`astryx\` 命令也能在任何文件夹中为你和任何编程智能体所用。在项目内，项目自己的版本仍会响应，因此全局安装不会改变团队和 CI 得到的结果——推荐项目安装与全局安装同时保留：
@@ -389,6 +402,8 @@ import { Text } from '@astryxdesign/core/Text';
 
 Astryx 坚信颜色应由**功能决定**，而不是名称。例如不要使用 \`text-black\` 或 \`bg-white\`，而是使用 \`text-primary\` 或 \`bg-surface\`。所有颜色都通过 \`light-dark()\` 自动适配亮暗模式。
 
+> 下文列出的具体色值均为 **Core 默认值**，每个主题都会定义自己的取值；运行 \`astryx theme list\` 可查看可用主题。
+
 ---
 
 ### 色彩分层结构 (Color Hierarchy)
@@ -407,7 +422,7 @@ Astryx 坚信颜色应由**功能决定**，而不是名称。例如不要使用
 - **\`--color-text-accent\`**: 强调文本（\`#0064E0\` | \`#3E9EFB\`）
 
 #### 3. 强调色与状态色
-- **\`--color-accent\`**: 品牌核心强调色（\`#0064E0\` | \`#2694FE\`）
+- **\`--color-accent\`**: 品牌核心强调色（\`#0064E0\` | \`#0171E3\`）
 - **\`--color-accent-muted\`**: 弱化强调色（\`#0082FB33\` | \`#0082FB3F\`）
 - **\`--color-on-accent\`**: 强调色上的文本/图标（\`#FFFFFF\`）
 - **\`--color-success\`**: 成功指示色（\`#0D8626\`）
@@ -686,6 +701,7 @@ const styles = stylex.create({
 | \`--duration-slow-min\` | 730ms | 慢速动效的下限 |
 | \`--duration-slow\` | 975ms | 大范围的翻页、渐变背景转场 |
 | \`--duration-slow-max\` | 1300ms | 慢速动效的上限 |
+| \`--duration-exit\` | \`var(--duration-fast)\`（175ms） | 标准消失时长，如按压释放淡出、元素退场 |
 
 ---
 
@@ -772,6 +788,8 @@ npm install @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral
 
 完成后组件即可使用——通过 \`className\`、\`xstyle\` 或 \`style\` 自定义。把 \`theme-neutral\` 换成任意主题包即可（\`astryx theme list\` 查看可用主题）。
 
+> **Next.js（webpack）**：自 v0.7.14 起包根不再带 \`'use client'\`，纯展示组件可在 React Server Component 中渲染。请在 \`next.config\` 中加上 \`experimental: {optimizePackageImports: ['@astryxdesign/core']}\`，服务端组件建议按子路径导入（如 \`@astryxdesign/core/Button\`），避免根导入把全部客户端组件打进首屏包。Turbopack 不受影响。
+
 ---
 
 ### 2. Tailwind CSS
@@ -798,6 +816,8 @@ Tailwind v4 桥接把设计令牌映射到工具类：颜色、间距、圆角�
 \`\`\`
 
 桥接是纯 CSS，无 JS。主题变化（暗色模式、自定义主题）会自动生效，因为工具类引用的是组件同样使用的 CSS 自定义属性。
+
+> **层顺序陷阱**：\`@layer\` 声明行必须写在所有 import 之前。已有 Tailwind 的应用保留自己的 \`@import "tailwindcss"\`，把 \`@layer\` 行加在它的**上方**、Astryx 样式表加在下方——写在 Tailwind import 之后会让 Astryx reset 反超所有工具类，且构建与控制台不会有任何报错。同时确保 \`globals.css\` 是页面加载的第一个样式表（在根布局中最先导入），否则层的先后顺序由其他先加载的样式表决定。
 
 ---
 
@@ -1098,7 +1118,7 @@ npx astryx theme palette generate palette.config.json --out palette.generated.ts
 令牌值中的 \`[亮, 暗]\` 元组会自动适配模式。\`Theme\` 默认 \`mode="system"\`，跟随操作系统偏好，也可以显式设为 \`light\` 或 \`dark\`：
 
 \`\`\`tsx
-'--color-accent': ['#0064E0', '#2694FE']
+'--color-accent': ['#0064E0', '#0171E3']
 //                   ^亮色     ^暗色
 
 const [mode, setMode] = useState<'light' | 'dark'>('light');
