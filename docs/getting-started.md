@@ -65,6 +65,17 @@ yarn add @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral @astryx
 npx astryx init
 ```
 
+### 升级
+
+用一条命令把应用列出的所有 Astryx 包升级到同一个 release。每个主题都声明了它所匹配的精确 Core 版本，停留在旧 release 的主题会与新的 Core 不匹配：
+
+```bash
+npm install @astryxdesign/core@latest @astryxdesign/theme-neutral@latest @astryxdesign/cli@latest
+npx astryx upgrade --from <旧 Core 版本> --apply
+```
+
+把应用列出的其他 Astryx 包也加进同一条安装命令，并把升级前的 Core 版本传给 `--from`。如果包管理器会暂缓新发布的版本，请豁免整个 `@astryxdesign/*` scope；pnpm 中配置 `minimumReleaseAgeExclude: ['@astryxdesign/*']`。只豁免其中一部分包会导致装到不同 release 的包混在一起。
+
 ### 只安装一次，随处可用
 
 也建议为自己的电脑全局安装 CLI。这样即使当前还没有项目，`astryx` 命令也能在任何文件夹中为你和任何编程智能体所用。在项目内，项目自己的版本仍会响应，因此全局安装不会改变团队和 CI 得到的结果——推荐项目安装与全局安装同时保留：
@@ -324,6 +335,8 @@ npm install @astryxdesign/core @stylexjs/stylex @astryxdesign/theme-neutral
 
 完成后组件即可使用——通过 `className`、`xstyle` 或 `style` 自定义。把 `theme-neutral` 换成任意主题包即可（`astryx theme list` 查看可用主题）。
 
+> **Next.js（webpack）**：自 v0.7.14 起包根不再带 `'use client'`，纯展示组件可在 React Server Component 中渲染。请在 `next.config` 中加上 `experimental: {optimizePackageImports: ['@astryxdesign/core']}`，服务端组件建议按子路径导入（如 `@astryxdesign/core/Button`），避免根导入把全部客户端组件打进首屏包。Turbopack 不受影响。
+
 ### xstyle Prop
 
 每个组件都接受 xstyle prop 进行样式自定义。它接受通过 `stylex.create()` 创建的 StyleX 样式，而非行内对象或类名。StyleX 样式在构建时编译，以获得最佳去重和死代码消除。
@@ -382,6 +395,8 @@ const overrides = stylex.create({
   <Button label="Cancel" variant="secondary" />
 </div>
 ```
+
+> **层顺序陷阱**：`@layer` 声明行必须写在所有 import 之前。已有 Tailwind 的应用保留自己的 `@import "tailwindcss"`，把 `@layer` 行加在它的**上方**、Astryx 样式表加在下方——写在 Tailwind import 之后会让 Astryx reset 反超所有工具类，且构建与控制台不会有任何报错。同时确保 `globals.css` 是页面加载的第一个样式表（在根布局中最先导入）。
 
 ### className 和 style Props
 
@@ -707,6 +722,8 @@ const editorialTheme = defineTheme({
 
 颜色是语义化的：令牌描述用途而非外观。每个颜色通过 CSS `light-dark()` 在亮暗模式之间自动适配。
 
+> 下文列出的具体色值均为 **Core 默认值**，每个主题都会定义自己的取值；运行 `astryx theme list` 可查看可用主题。
+
 ### 表面层次
 
 - `--color-background-body`：#F1F4F7 / #111112（页面背景）
@@ -724,7 +741,7 @@ const editorialTheme = defineTheme({
 
 ### 强调色与状态色
 
-- `--color-accent`：#0064E0 / #2694FE
+- `--color-accent`：#0064E0 / #0171E3
 - `--color-accent-muted`：#0082FB33 / #0082FB3F
 - `--color-on-accent`：#FFFFFF
 - `--color-success`：#0D8626
@@ -969,6 +986,7 @@ const styles = stylex.create({
 | `--duration-slow-min` | 730ms |
 | `--duration-slow` | 975ms |
 | `--duration-slow-max` | 1300ms |
+| `--duration-exit` | `var(--duration-fast)`（175ms，标准消失时长） |
 
 ### 缓动
 
@@ -1388,7 +1406,7 @@ npx astryx theme build ./src/themes/ocean.ts
 
 ```tsx
 // 令牌中使用 [亮, 暗] 元组
-'--color-accent': ['#0064E0', '#2694FE']
+'--color-accent': ['#0064E0', '#0171E3']
 
 // 使用按钮切换
 const [mode, setMode] = useState<'light' | 'dark'>('light');

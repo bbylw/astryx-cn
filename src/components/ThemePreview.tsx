@@ -34,7 +34,7 @@ const themes: ThemeSpec[] = [
       "--preview-bg-surface": "#1F1F22",
       "--preview-text-primary": "#DFE2E5",
       "--preview-text-secondary": "#AAAFB5",
-      "--preview-accent": "#2694FE",
+      "--preview-accent": "#0171E3",
       "--preview-border": "#3A3B40",
       "--preview-radius": "12px",
     },
@@ -303,7 +303,7 @@ export function ThemePreview() {
               </div>
               <Badge
                 variant="neutral"
-                label="Beta v0.7.6"
+                label="Beta v0.7.16"
                 className="text-[10px] font-mono select-none px-2 py-0.5 rounded-full"
                 style={{
                   backgroundColor: activeVars["--preview-accent"],
